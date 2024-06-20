@@ -117,6 +117,6 @@ However, if there is **no button pressed or selected**, the motor will stop.
 
 Some of you might have found there is built-in colors in the SW-Wight.
 
-In the **SWWTool.h**, a class called ***SWWHexColor*** includes these colors.
+In the **SWWTool.h**, a class called ***SWWHexColor*** **(the instance name is SWWColor)** includes these colors.
 
 And I actually grab these colors from [🎨 Flat UI Palette v1 | Flat UI Colors 🎨 280 handpicked colors ready for COPY & PASTE](https://flatuicolors.com/palette/defo)
