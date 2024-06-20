@@ -62,6 +62,7 @@ The installation is actually pretty simple. Here is something  you need to do.
 
     
 5. Try to compile it. If the compiler does not report an error, congratulation! (￣▽￣)~*  You just successfully install SW-Wight to your project.︿(￣︶￣)︿
+   If something goes wrong, you could check whether your Brain is declared in the **robot-config.h** or **robot-config.cpp**
 
 # DEMO Explanation
 
