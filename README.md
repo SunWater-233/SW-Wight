@@ -38,7 +38,7 @@ The installation is actually pretty simple. Here is something  you need to do.
     And then the makefile should look like this ↓
     ![屏幕截图 2024-06-20 145808](https://github.com/SunWater-233/SW-Wight/assets/109706896/dc9e3d60-04f1-4bca-ace2-5aa607a82b35)
 
-4. Add some code in the **main.cpp**
+4. Add some code in the ***main.cpp***
     
     code:
     
@@ -61,7 +61,7 @@ The installation is actually pretty simple. Here is something  you need to do.
     ![屏幕截图 2024-06-20 150323](https://github.com/SunWater-233/SW-Wight/assets/109706896/a906d086-a886-4903-a3aa-0c229c99598d)
 
     
-5. Try to compile it. If the compiler does not report an error, congratulation! (￣▽￣)~*  You just successfully install SW-Wight to your project.(´･ᴗ･`) If something goes wrong, you could check  **robot-config.h** and **robot-config.cpp**.Your Brain should be declared there.
+5. Try to compile it. If the compiler does not report an error, congratulation! (￣▽￣)~*  You just successfully install SW-Wight to your project.(´･ᴗ･`) If something goes wrong, you could check  **robot-config.h** and **robot-config.cpp**.Your Brain and Motors should be declared there.
 
 # DEMO Explanation
 
@@ -101,13 +101,13 @@ The Graph B records the present motor velocity(unit is rpm).
 
 ## Buttons’ Functions
 
-If you press C1, the motor called *TestMotor*  will spin at 25% of power.
+If you press C1, a motor called *TestMotor* ,which should be plugged on the **PORT6**(you coule see this in the ***robot-config.cpp***), will spin at 25% of power.
 
-If you press C2 or C3, the buttons you selected will be selected.
+If you press C2 or C3, the buttons you pressed will be selected.
 
-If C2 is selected, *TestMotor*  will spin at 50% of power.
+If only C2 is selected, *TestMotor*  will spin at 50% of power.
 
-If C3 is selected, *TestMotor*  will spin at 75% of power.
+If only C3 is selected, *TestMotor*  will spin at 75% of power.
 
 If C2 and C3 are both selected, *TestMotor*  will spin at 100% of power.
 
