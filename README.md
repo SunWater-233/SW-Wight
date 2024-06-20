@@ -4,7 +4,7 @@
 
 SW-Wight is a GUI library based on the vex v5 system and V5 API. I only spend 3 days on this project, so there must be some shortages in this project somewhere. I’m glad  to hear your suggestions. (〃'▽'〃)
 
-The SW-Wight contains 4 wights now. They are **button**, **buttonGroup**, **Graph**, **Panel**. And detailed api is directly written in the corresponding header files for you to check it out(*^▽^*).
+The SW-Wight contains 4 widgets now. They are **button**, **buttonGroup**, **Graph**, **Panel**. And detailed api is directly written in the corresponding header files for you to check it out(*^▽^*).
 
 # Install
 
@@ -76,17 +76,17 @@ The picture below is a screenshot of the demo. You could see there are 3 wights 
 
  
 
-| Name in the photo | Wight Type | Name in code |
-| --- | --- | --- |
-| A | panel | TestPanel |
-| B | graph | TestGraph |
-| C | button | TestButtonGroup |
+| Name in the photo | Widget Type | Name in code    |
+| ----------------- | ----------- | --------------- |
+| A                 | panel       | TestPanel       |
+| B                 | graph       | TestGraph       |
+| C                 | button      | TestButtonGroup |
 
-| Name in the photo | Wight Type | Name in code |
-| --- | --- | --- |
-| C1 | button | TestButton |
-| C2 | button | TestButton_1 |
-| C3 | button | TestButton_2 |
+| Name in the photo | Widget Type | Name in code |
+| ----------------- | ----------- | ------------ |
+| C1                | button      | TestButton   |
+| C2                | button      | TestButton_1 |
+| C3                | button      | TestButton_2 |
 
 ![BrainEdited](https://github.com/SunWater-233/SW-Wight/assets/109706896/97d157a6-cbeb-42ac-a0d8-2bbcf2986a4f)
 
