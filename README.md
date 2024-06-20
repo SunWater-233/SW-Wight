@@ -61,12 +61,11 @@ The installation is actually pretty simple. Here is something  you need to do.
     ![屏幕截图 2024-06-20 150323](https://github.com/SunWater-233/SW-Wight/assets/109706896/a906d086-a886-4903-a3aa-0c229c99598d)
 
     
-5. Try to compile it. If the compiler does not report an error, congratulation! (￣▽￣)~*  You just successfully install SW-Wight to your project.︿(￣︶￣)︿
-   If something goes wrong, you could check whether your Brain is declared in the **robot-config.h** or **robot-config.cpp**
+5. Try to compile it. If the compiler does not report an error, congratulation! (￣▽￣)~*  You just successfully install SW-Wight to your project.(´･ᴗ･`) If something goes wrong, you could check  **robot-config.h** and **robot-config.cpp**.Your Brain should be declared there.
 
 # DEMO Explanation
 
-It’s recommended to write SW-Wight code in a file called **LogicAndRender.cpp** in the SWWight folder. Here is a screenshot of a demo I wrote for you to take a look. Of course, you can find in this github project.
+It’s recommended to write SW-Wight code in a file called **LogicAndRender.cpp** in the SWWight folder. Here is a screenshot of the demo I wrote. Of course, you can find it in this github project.
 If you want to **enable** this demo, replace the **"LogicAndRender.cpp"** with this file. 
 
 ![屏幕截图 2024-06-20 163320](https://github.com/SunWater-233/SW-Wight/assets/109706896/a7e7db0a-6e16-4526-9cc5-453032d1eef9)
