@@ -24,6 +24,7 @@ class panel {
     int data_label_y;
     int data_label_width;
     int data_label_height;
+    bool data_label_render = true;
     color data_label_color;
     fontType data_label_font = fontType::mono40;
 
@@ -49,6 +50,10 @@ class panel {
     // @brief set the maximum  vaule of the data
     /// @param min_lim
     void set_panel_data_max(float max_lim);
+
+    /// @brief whether the data label be rendered
+    /// @param state
+    void set_data_label_enable(bool state);
 
     /// @brief set labe color
     /// @param hex_color require const char type

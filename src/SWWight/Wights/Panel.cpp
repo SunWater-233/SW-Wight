@@ -16,9 +16,10 @@ panel::panel(int x, int y, int radius, float data_lim_min, float data_lim_max)
     set_backgroud_color(SWWColor.midnight_blue);
 }
 
-void panel::set_data_label_width_height(){
+void panel::set_data_label_width_height() {
     data_label_width = SWWTool.get_character_width(data_label, data_label_font);
-    data_label_height = SWWTool.get_character_height(data_label, data_label_font);
+    data_label_height =
+        SWWTool.get_character_height(data_label, data_label_font);
 }
 
 void panel::set_panel_data(int data) {
@@ -34,12 +35,12 @@ void panel::set_data_label_color(const char *hex_color) {
     data_label_color.web(hex_color);
 }
 
+void panel::set_data_label_enable(bool state) { data_label_render = state; }
+
 void panel::set_data_label_color(int r, int g, int b) {
     data_label_color = SWWTool.rgb_to_vex_color(r, g, b);
 }
-void panel::set_data_label_font(fontType font) {
-    data_label_font = font;
-}
+void panel::set_data_label_font(fontType font) { data_label_font = font; }
 
 void panel::set_ouline_width(int width) { outline_width = width; }
 
@@ -86,17 +87,20 @@ void ::panel::display() {
                             chart_radius - outline_width);
 
     // draw the data label
-    data_label = SWWTool.int_to_char(panel_data);
-    Brain.Screen.setPenColor(data_label_color);
-    Brain.Screen.setFillColor(panel_backgroud_color);
-    Brain.Screen.setFont(data_label_font);
-    set_data_label_width_height();
+    if (data_label_render) {
+        data_label = SWWTool.int_to_char(panel_data);
+        Brain.Screen.setPenColor(data_label_color);
+        Brain.Screen.setFillColor(panel_backgroud_color);
+        Brain.Screen.setFont(data_label_font);
+        set_data_label_width_height();
 
-    data_label_x = chart_center_x - data_label_width / 2;
-    data_label_y = chart_center_y + data_label_height / 2 + chart_radius / 2;
+        data_label_x = chart_center_x - data_label_width / 2;
+        data_label_y =
+            chart_center_y + data_label_height / 2 + chart_radius / 2;
 
-    Brain.Screen.printAt(data_label_x, data_label_y, data_label);
-    delete[] data_label;    // release memory of data_label
+        Brain.Screen.printAt(data_label_x, data_label_y, data_label);
+        delete[] data_label;  // release memory of data_label
+    }
 
     // draw the indicator
     Brain.Screen.setPenColor(indicator_color);

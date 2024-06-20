@@ -16,8 +16,6 @@ using namespace vex;
 competition Competition;
 
 void pre_auton(void) {
-    wait(150, msec);
-
     logic_runner();
     render_runner();
 

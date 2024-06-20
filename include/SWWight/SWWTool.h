@@ -8,7 +8,15 @@
 
 #define PI 3.14159
 
+/// @brief There are to interact modes.
+/// PRESS: The button can be pressed.
+/// SELECT: The button can selected.
 enum interact_mode { PRESS, SELECT };
+
+/// @brief There is two display mode.
+/// STAY: All the data will remain in the graph, and zoom rate will change
+/// accroding to the data. PASS: There will only be some data in the graph, and
+/// the rest of data will be deleted.
 enum display_mode { STAY, PASS };
 
 class DevelopTool {
@@ -44,15 +52,15 @@ class DevelopTool {
 
     /// @brief Attention! This function might change your font
     /// setting on Screen.Remember to RESET your font if you need it.
-    /// @param str 
-    /// @param font 
+    /// @param str
+    /// @param font
     /// @return return the width of the string based on your font
     int get_character_width(char *str, fontType font);
 
     /// @brief Attention! This function might change your font
     /// setting on Screen.Remember to RESET your font if you need it.
-    /// @param str 
-    /// @param font 
+    /// @param str
+    /// @param font
     /// @return return the heiight of the string based on your font
     int get_character_height(char *str, fontType font);
 
@@ -61,18 +69,21 @@ class DevelopTool {
     /// @return the value of the largest element
     float find_max_in_vec(std::vector<float> vec);
 
-    /// @brief turn a float vaule into the type char* DONT forget to realse the memory
-    /// @param value 
+    /// @brief turn a float vaule into the type char* DONT forget to realse the
+    /// memory
+    /// @param value
     /// @return a value in char* type
     char *float_to_char(float value);
 
-    /// @brief turn a int vaule into the type char* DONT forget to realse the memory
-    /// @param value 
+    /// @brief turn a int vaule into the type char* DONT forget to realse the
+    /// memory
+    /// @param value
     /// @return a value in char* type
     char *int_to_char(int value);
 };
 extern DevelopTool SWWTool;
 
+// color below is from https://flatuicolors.com/palette/defo
 class SWWHexColor {
    public:
     const char *peter_river = "#3498db";

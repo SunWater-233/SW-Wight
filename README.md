@@ -67,6 +67,7 @@ The installation is actually pretty simple. Here is something  you need to do.
 # DEMO Explanation
 
 It’s recommended to write SW-Wight code in a file called **LogicAndRender.cpp** in the SWWight folder. Here is a screenshot of a demo I wrote for you to take a look. Of course, you can find in this github project.
+If you want to **enable** this demo, replace the **"LogicAndRender.cpp"** with this file. 
 
 ![屏幕截图 2024-06-20 163320](https://github.com/SunWater-233/SW-Wight/assets/109706896/a7e7db0a-6e16-4526-9cc5-453032d1eef9)
 ![屏幕截图 2024-06-20 163329](https://github.com/SunWater-233/SW-Wight/assets/109706896/9a7e3840-6645-463d-8c68-2d665cd8d053)

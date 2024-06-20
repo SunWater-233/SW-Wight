@@ -20,7 +20,9 @@ class button {
     bool pressing_state = false;
     bool selected_state = false;
 
-    // define the operating method of the button
+    /// @brief There are to interact modes.
+    /// PRESS: The button can be pressed.
+    /// SELECT: The button can be selected.
     enum interact_mode button_interact;
 
    public:

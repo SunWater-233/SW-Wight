@@ -12,6 +12,11 @@ class graph {
     int graph_width, graph_height;
     int graph_line_width = 2;
     color graph_color;
+
+    /// @brief There is two display mode.
+    /// STAY: All the data will remain in the graph, and zoom rate will change
+    /// accroding to the data. PASS: There will only be some data in the graph,
+    /// and the rest of data will be deleted.
     display_mode graph_display_mode;
 
     // data transfered from the user
@@ -76,9 +81,9 @@ class graph {
     void set_graph_color(const char *hex_color);
 
     /// @brief set the color of line or dots in the graph
-    /// @param r 
-    /// @param g 
-    /// @param b 
+    /// @param r
+    /// @param g
+    /// @param b
     void set_graph_color(int r, int g, int b);
 
     /// @brief set the color of line or dots in the axis
@@ -86,14 +91,14 @@ class graph {
     void set_axis_color(const char *hex_color);
 
     /// @brief set the color of line or dots in the axis
-    /// @param r 
-    /// @param g 
-    /// @param b 
+    /// @param r
+    /// @param g
+    /// @param b
     void set_axis_color(int r, int g, int b);
 
     /// @brief add data to the graph
-    /// @param x 
-    /// @param y 
+    /// @param x
+    /// @param y
     void add_data(float x, float y);
 
     /// @brief clear all data in the graph
