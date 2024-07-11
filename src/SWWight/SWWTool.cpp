@@ -1,9 +1,13 @@
 #include "SWWight/SWWTool.h"
 
-using namespace vex;
-
+// some definations of classes in the namespace
+namespace SWWight {
+vex::brain SWWBrain;
 DevelopTool SWWTool;
 SWWHexColor SWWColor;
+}  // namespace SWWight
+
+using namespace SWWight;
 
 color DevelopTool::rgb_to_vex_color(int r, int g, int b) {
     color tmp = color(r, g, b);
@@ -16,11 +20,11 @@ bool DevelopTool::get_start_state() { return start_gui; }
 
 float DevelopTool::get_frame_pause_time() { return frame_pause_time; }
 
-int DevelopTool::get_character_width(char *str, fontType font) {
+int DevelopTool::get_character_width(char* str, fontType font) {
     int font_width;
 
-    Brain.Screen.setFont(font);
-    font_width = Brain.Screen.getStringWidth(str);
+    SWWBrain.Screen.setFont(font);
+    font_width = SWWBrain.Screen.getStringWidth(str);
 
     return font_width;
 }
@@ -28,13 +32,13 @@ int DevelopTool::get_character_width(char *str, fontType font) {
 int DevelopTool::get_character_height(char* str, fontType font) {
     int font_height;
 
-    Brain.Screen.setFont(font);
-    font_height = Brain.Screen.getStringHeight(str);
+    SWWBrain.Screen.setFont(font);
+    font_height = SWWBrain.Screen.getStringHeight(str);
 
     return font_height;
 }
 
-float DevelopTool::find_max_in_vec(std::vector<float> vec) {
+float DevelopTool::find_max_in_float_vec(std::vector<float> vec) {
     float max = vec[0];
     for (int i = 1; i < vec.size(); i++) {
         if (vec[i] > max) {

@@ -6,18 +6,23 @@
 
 #include "vex.h"
 
+namespace SWWight {
+extern vex::brain SWWBrain;
+
 #define PI 3.14159
 
 /// @brief There are to interact modes.
 /// PRESS: The button can be pressed.
 /// SELECT: The button can selected.
-enum interact_mode { PRESS, SELECT };
+enum button_interact_mode { PRESS, SELECT };
 
 /// @brief There is two display mode.
 /// STAY: All the data will remain in the graph, and zoom rate will change
 /// accroding to the data. PASS: There will only be some data in the graph, and
 /// the rest of data will be deleted.
-enum display_mode { STAY, PASS };
+enum graph_display_mode { STAY, PASS };
+
+enum slider_layout_mode { VERTICAL, HORIZONTAL };
 
 class DevelopTool {
    private:
@@ -67,7 +72,7 @@ class DevelopTool {
     /// @brief find the largest element in a float vector.
     /// @param vec a float vector
     /// @return the value of the largest element
-    float find_max_in_vec(std::vector<float> vec);
+    float find_max_in_float_vec(std::vector<float> vec);
 
     /// @brief turn a float vaule into the type char* DONT forget to realse the
     /// memory
@@ -81,6 +86,7 @@ class DevelopTool {
     /// @return a value in char* type
     char *int_to_char(int value);
 };
+
 extern DevelopTool SWWTool;
 
 // color below is from https://flatuicolors.com/palette/defo
@@ -107,5 +113,6 @@ class SWWHexColor {
     const char *concrete = "#95a5a6";
     const char *asbestos = "#7f8c8d";
 };
-
 extern SWWHexColor SWWColor;
+
+}  // namespace SWWight

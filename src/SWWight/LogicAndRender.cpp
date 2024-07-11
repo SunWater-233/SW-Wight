@@ -1,19 +1,34 @@
 #include "SWWight/SWWight.h"
 
-using namespace vex;
+using namespace SWWight;
 
 // declare your wight here ↓
+button TestButton(420, 5, 50, 50, PRESS);
+button TestButton_1(420, 70, 50, 50, SELECT);
+button TestButton_2(420, 135, 50, 50, SELECT);
 
+std::vector<button*> a = {&TestButton, &TestButton_1, &TestButton_2};
+buttonGroup TestButtonGroup(a, 2);
+
+graph TestGraph(180, 180, 180, 150, PASS);
+
+panel TestPanel(20, 20, 50, -100, 100);
+
+slider TestSlider(70, 70 ,40, 5, VERTICAL, 0, 100);
+
+// if you don't kown what the constructors↑ above mean,
+// check the corresponding header files.
 
 int logic() {
     while (true) {
         while (SWWTool.get_start_state()) {
             // write you GUI logic code here ↓
-            
+            TestPanel.set_panel_data(TestMotor.velocity(pct));
+            TestGraph.add_data(Brain.timer(msec), TestMotor.velocity(rpm));
 
             /*
             NOTICE:
-                If you wany to make your button pressible or selectable,
+                If you want to make your button pressible or selectable,
                 you have to use function started with "determine",
                 just like the example below.
 
@@ -24,9 +39,25 @@ int logic() {
             REASON:
                 "determine_selected_button()" has a "waitUtil" function in it,
                 which could pause the task and make the button behave
-                weird(unable to be seleced, outline flashing....)
+                weird(unable to be seleced, outline flashing....) if you use
+                mutipule "determine" functions.
             */
 
+            TestButtonGroup.determine_selected_button();
+            if (TestButton.determine_pressing()) {
+                TestMotor.spin(forward, 25, pct);
+            } else {
+                if (TestButton_1.get_selected_state() &&
+                    TestButton_2.get_selected_state()) {
+                    TestMotor.spin(forward, 100, pct);
+                } else if (TestButton_1.get_selected_state()) {
+                    TestMotor.spin(forward, 50, pct);
+                } else if (TestButton_2.get_selected_state()) {
+                    TestMotor.spin(forward, 75, pct);
+                } else {
+                    TestMotor.stop(coast);
+                }
+            }
 
             // set the fps(fps setting could be seen in SWWTool.h)
             wait(SWWTool.get_frame_pause_time(), msec);
@@ -37,16 +68,21 @@ int logic() {
 
 int render() {
     // set your wight here ↓
-    
+    TestPanel.set_data_label_font(mono20);
+    TestGraph.set_graph_color(SWWColor.sun_flower);
+    TestGraph.set_x_pass_pixel_per_frame(2);
 
     while (true) {
         while (SWWTool.get_start_state()) {
-            Brain.Screen.clearScreen();
+            SWWight::SWWBrain.Screen.clearScreen();
             // write you GUI layout code here↓
 
+            TestPanel.display();
+            TestGraph.display_line();
+            TestButtonGroup.display();
 
             // make sure everything render at the same time
-            Brain.Screen.render();
+            SWWight::SWWBrain.Screen.render();
             // set the fps(fps setting could be seen in SWWTool.h)
             wait(SWWTool.get_frame_pause_time(), msec);
         }
