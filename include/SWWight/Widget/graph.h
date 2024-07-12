@@ -14,11 +14,15 @@ class graph {
     int graph_line_width = 2;
     color graph_color;
 
+    graph_line_style graph_style;
+
     /// @brief There is two display mode.
     /// STAY: All the data will remain in the graph, and zoom rate will change
     /// accroding to the data. PASS: There will only be some data in the graph,
     /// and the rest of data will be deleted.
     graph_display_mode graph_display;
+
+    bool graph_remove_state = false;
 
     // data transfered from the user
     std::vector<float> x_raw_data;
@@ -35,7 +39,7 @@ class graph {
 
     // only work in PASS mode
     // controll the lateral movement speed of the graph
-    int x_pass_space_per_frame = 5;
+    int x_pass_pixel_per_frame = 5;
 
     // basic variables of the axis
     int axis_width = 2;
@@ -61,8 +65,17 @@ class graph {
     /// @return Y coordinate values
     int y_data_to_coordinate_system(float y_data);
 
+    /// @brief display data in the form of line
+    void display_with_line();
+
+    /// @brief display data in the form of dots
+    void display_with_dot();
+
+    graph *get_pointer_of_this_instance();
+
    public:
-    graph(int x, int y, int width, int height, graph_display_mode mode = STAY);
+    graph(int x, int y, int width, int height, graph_line_style style,
+          graph_display_mode mode = STAY);
 
     /// @brief set origin coordinates
     /// @param x unit is pixel
@@ -87,6 +100,8 @@ class graph {
     /// @param b
     void set_graph_color(int r, int g, int b);
 
+    void set_graph_line_style(graph_line_style style);
+
     /// @brief set the color of line or dots in the axis
     /// @param hex_color require const char type
     void set_axis_color(const char *hex_color);
@@ -97,19 +112,23 @@ class graph {
     /// @param b
     void set_axis_color(int r, int g, int b);
 
+    /// @brief whether this graph will be removed or not
+    /// @return return true if this graph will be removed
+    bool get_remove_state();
+
     /// @brief add data to the graph
     /// @param x
     /// @param y
     void add_data(float x, float y);
 
+    /// @brief display the graph accronding to the line style and display mode
+    void display();
+
     /// @brief clear all data in the graph
     void clear();
 
-    /// @brief display data in the form of line
-    void display_line();
-
-    /// @brief display data in the form of dots
-    void display_dot();
+    /// @brief remove the graph from the render list(delte the graph)
+    /// ATTENTION This function will REMOVE this instance from the MEMORY
+    void remove();
 };
-
 }  // namespace SWWight

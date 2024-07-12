@@ -7,20 +7,22 @@ class slider {
    private:
     int slider_x, slider_y;
     int slider_width, slider_height;
-    slider_layout_mode slider_layout = HORIZONTAL;
+    slider_layout_mode slider_layout;
     color slider_fill_color;
-    color slider_empty_color;
 
-    int slider_outline_width = 5;
+    int slider_outline_width;
     color slider_outline_color;
 
     int slider_dot_x, slider_dot_y;
+    float slider_dot_zoom_rate = 1.5;
     int slider_dot_radius;
     color slider_dot_color;
 
     // define the max and min value that the slider can hold
-    float slider_capacity_min = 0;
-    float slider_capacity_max = 100;
+    float slider_capacity_min;
+    float slider_capacity_max;
+    float slider_current_value = 0;
+    float value_proportionality = 0;
 
     // some variables used during diaplay prograss
     int rectangle_x, rectangle_y;
@@ -29,7 +31,7 @@ class slider {
     int rounded_corner_radius;
 
     bool determine_slider_pressing();
-    void update_dot_position();
+    void update_dot_data();
 
    public:
     slider(int x, int y, int width, int height, slider_layout_mode layout,
@@ -44,16 +46,6 @@ class slider {
     /// @param g
     /// @param b
     void set_fill_color(int r, int g, int b);
-
-    /// @brief set the empty color of the slider
-    /// @param hex_color require const char type
-    void set_empty_color(const char *hex_color);
-
-    /// @brief set the empty color of the slider
-    /// @param r
-    /// @param g
-    /// @param b
-    void set_empty_color(int r, int g, int b);
 
     /// @brief set the outline's width of the slider
     /// @param width unit is pixel

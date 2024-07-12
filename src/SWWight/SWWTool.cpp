@@ -38,6 +38,20 @@ int DevelopTool::get_character_height(char* str, fontType font) {
     return font_height;
 }
 
+template <typename T>
+int DevelopTool::get_element_index_in_vec(std::vector<T> vec, T to_find) {
+    int index = -1;
+    auto it = std::find(vec.begin(), vec.end(), to_find);
+
+    if (vec.empty() || it == vec.end()) {
+        index = -1;
+    } else {
+        index = std::distance(vec.begin(), it);
+    }
+
+    return index;
+}
+
 float DevelopTool::find_max_in_float_vec(std::vector<float> vec) {
     float max = vec[0];
     for (int i = 1; i < vec.size(); i++) {

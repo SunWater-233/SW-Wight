@@ -2,11 +2,13 @@
 
 using namespace SWWight;
 
-graph::graph(int x, int y, int width, int height, graph_display_mode mode)
+graph::graph(int x, int y, int width, int height, graph_line_style style,
+             graph_display_mode mode)
     : graph_base_point_x(x),
       graph_base_point_y(y),
       graph_width(width),
       graph_height(height),
+      graph_style(style),
       graph_display(mode)
 
 {
@@ -74,13 +76,13 @@ int graph::x_data_to_coordinate_system(float x_data) {
 
     } else if (graph_display == PASS) {
         if (x_raw_data.size() >= 3) {
-            x_zoom_rate = x_pass_space_per_frame /
+            x_zoom_rate = x_pass_pixel_per_frame /
                           fabs(x_raw_data[x_raw_data.size() - 4] -
                                x_raw_data[x_raw_data.size() - 3]);
             delta_space = x_zoom_rate * fabs(x_raw_data[x_raw_data.size() - 2] -
                                              x_raw_data[x_raw_data.size() - 1]);
         } else {
-            delta_space = x_pass_space_per_frame;
+            delta_space = x_pass_pixel_per_frame;
         }
     }
 
@@ -96,18 +98,40 @@ int graph::y_data_to_coordinate_system(float y_data) {
     return graph_base_point_y;
 }
 
+void graph::display_with_line() {
+    draw_axis();
+    SWWBrain.Screen.setPenColor(graph_color);
+    SWWBrain.Screen.setPenWidth(graph_line_width);
+
+    for (int i = 1; i < x_screen_pos.size(); i++) {
+        SWWBrain.Screen.drawLine(x_screen_pos[i - 1], y_screen_pos[i - 1],
+                                 x_screen_pos[i], y_screen_pos[i]);
+    }
+}
+
+void graph::display_with_dot() {
+    draw_axis();
+    SWWBrain.Screen.setPenColor(graph_color);
+    SWWBrain.Screen.setFillColor(graph_color);
+    for (int i = 1; i < x_screen_pos.size(); i++) {
+        draw_dot_with_width(x_screen_pos[i], y_screen_pos[i], graph_line_width);
+    }
+}
+
+graph* graph::get_pointer_of_this_instance() { return this; }
+
 void graph::set_graph_base_point(int x, int y) {
     graph_base_point_x = x;
     graph_base_point_y = y;
 }
 
 void graph::set_x_pass_pixel_per_frame(int pixel) {
-    x_pass_space_per_frame = pixel;
+    x_pass_pixel_per_frame = pixel;
 }
 
 void graph::set_graph_width(int width) { graph_line_width = width; }
 
-void graph::set_graph_color(const char *hex_color) {
+void graph::set_graph_color(const char* hex_color) {
     graph_color.web(hex_color);
 }
 
@@ -115,11 +139,17 @@ void graph::set_graph_color(int r, int g, int b) {
     graph_color = SWWTool.rgb_to_vex_color(r, g, b);
 }
 
-void graph::set_axis_color(const char *hex_color) { axis_color.web(hex_color); }
+void graph::set_graph_line_style(graph_line_style style) {
+    graph_style = style;
+}
+
+void graph::set_axis_color(const char* hex_color) { axis_color.web(hex_color); }
 
 void graph::set_axis_color(int r, int g, int b) {
     axis_color = SWWTool.rgb_to_vex_color(r, g, b);
 }
+
+bool graph::get_remove_state() { return graph_remove_state; }
 
 void graph::add_data(float x, float y) {
     std::vector<int> x_output;
@@ -159,6 +189,14 @@ void graph::add_data(float x, float y) {
     y_screen_pos = y_output;
 }
 
+void graph::display() {
+    if (graph_style == LINE) {
+        display_with_line();
+    } else if (graph_style == DOT) {
+        display_with_dot();
+    }
+}
+
 void graph::clear() {
     x_screen_pos = {};
     y_screen_pos = {};
@@ -169,22 +207,4 @@ void graph::clear() {
     y_zoom_rate = 1.0;
 }
 
-void graph::display_line() {
-    draw_axis();
-    SWWBrain.Screen.setPenColor(graph_color);
-    SWWBrain.Screen.setPenWidth(graph_line_width);
-
-    for (int i = 1; i < x_screen_pos.size(); i++) {
-        SWWBrain.Screen.drawLine(x_screen_pos[i - 1], y_screen_pos[i - 1],
-                                 x_screen_pos[i], y_screen_pos[i]);
-    }
-}
-
-void graph::display_dot() {
-    draw_axis();
-    SWWBrain.Screen.setPenColor(graph_color);
-    SWWBrain.Screen.setFillColor(graph_color);
-    for (int i = 1; i < x_screen_pos.size(); i++) {
-        draw_dot_with_width(x_screen_pos[i], y_screen_pos[i], graph_line_width);
-    }
-}
+void graph::remove() { graph_remove_state = true; }

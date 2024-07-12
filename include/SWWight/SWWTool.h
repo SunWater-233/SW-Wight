@@ -22,6 +22,8 @@ enum button_interact_mode { PRESS, SELECT };
 /// the rest of data will be deleted.
 enum graph_display_mode { STAY, PASS };
 
+enum graph_line_style { LINE, DOT };
+
 enum slider_layout_mode { VERTICAL, HORIZONTAL };
 
 class DevelopTool {
@@ -73,6 +75,12 @@ class DevelopTool {
     /// @param vec a float vector
     /// @return the value of the largest element
     float find_max_in_float_vec(std::vector<float> vec);
+
+    /// @brief find specfic element in a vector
+    /// @param vec
+    /// @return the index of the found element.If finds nothing, return -1
+    template <typename T>
+    int get_element_index_in_vec(std::vector<T> vec, T to_find);
 
     /// @brief turn a float vaule into the type char* DONT forget to realse the
     /// memory

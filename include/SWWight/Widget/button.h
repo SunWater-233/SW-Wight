@@ -24,7 +24,7 @@ class button{
     /// @brief There are to interact modes.
     /// PRESS: The button can be pressed.
     /// SELECT: The button can be selected.
-    enum SWWight::button_interact_mode button_interact;
+    enum button_interact_mode button_interact;
 
    public:
     // constructors for the button

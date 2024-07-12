@@ -8,13 +8,13 @@ button TestButton_1(420, 70, 50, 50, SELECT);
 button TestButton_2(420, 135, 50, 50, SELECT);
 
 std::vector<button*> a = {&TestButton, &TestButton_1, &TestButton_2};
-buttonGroup TestButtonGroup(a, 2);
+buttonGroup TestButtonGroup(a, 1);
 
-graph TestGraph(180, 180, 180, 150, PASS);
+graph TestGraph(180, 180, 180, 150, LINE, PASS);
 
 panel TestPanel(20, 20, 50, -100, 100);
 
-slider TestSlider(70, 70 ,40, 5, VERTICAL, 0, 100);
+slider TestSlider(30, 150, 120, 15, HORIZONTAL, 0, 100);
 
 // if you don't kown what the constructors↑ above mean,
 // check the corresponding header files.
@@ -45,7 +45,7 @@ int logic() {
 
             TestButtonGroup.determine_selected_button();
             if (TestButton.determine_pressing()) {
-                TestMotor.spin(forward, 25, pct);
+                TestMotor.spin(forward, TestSlider.get_slider_value(), pct);
             } else {
                 if (TestButton_1.get_selected_state() &&
                     TestButton_2.get_selected_state()) {
@@ -74,16 +74,18 @@ int render() {
 
     while (true) {
         while (SWWTool.get_start_state()) {
-            SWWight::SWWBrain.Screen.clearScreen();
+            SWWBrain.Screen.clearScreen();
             // write you GUI layout code here↓
 
             TestPanel.display();
-            TestGraph.display_line();
+            TestGraph.display();
             TestButtonGroup.display();
+            TestSlider.display();
 
             // make sure everything render at the same time
-            SWWight::SWWBrain.Screen.render();
+            // SWWBrain.Screen.render();
             // set the fps(fps setting could be seen in SWWTool.h)
+            SWWBrain.Screen.render();
             wait(SWWTool.get_frame_pause_time(), msec);
         }
         wait(SWWTool.get_frame_pause_time(), msec);
