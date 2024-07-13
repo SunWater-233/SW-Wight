@@ -18,7 +18,6 @@ competition Competition;
 void pre_auton(void) {
     SWWight::logic_runner();
     SWWight::render_runner();
-
 }
 
 void autonomous(void) {}
