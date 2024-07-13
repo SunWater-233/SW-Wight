@@ -46,12 +46,9 @@ The installation is actually pretty simple. Here is something  you need to do.
     #include "SWWight/SWWight.h"
     ........
     void pre_auton(void) {
-      // Initializing Robot Configuration. DO NOT REMOVE!
-      vexcodeInit();
-      logic_runner();
-      render_runner();
-      // All activities that occur before the competition starts
-      // Example: clearing encoders, setting servo positions, ...
+      SWWight::logic_runner();
+      SWWight::render_runner();
+      ........
     }
     ........
     ```
