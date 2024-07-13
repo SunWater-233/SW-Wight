@@ -3,7 +3,7 @@
 #include "SWWight/SWWTool.h"
 
 namespace SWWight {
-class button{
+class button {
    private:
     // basic variables inital
     // all color will be initialized in the constructor
@@ -18,21 +18,45 @@ class button{
     color outline_display_color;
     color outline_default_color;
     color outline_selected_color;
-    bool pressing_state = false;
-    bool selected_state = false;
 
-    /// @brief There are to interact modes.
+    /// @brief There are interact modes.
     /// PRESS: The button can be pressed.
     /// SELECT: The button can be selected.
     enum button_interact_mode button_interact;
 
+    DevelopTool::PressDetector ButtonPressDetector;
+    bool pressing_state = false;
+    bool selected_state = false;
+
    public:
     // constructors for the button
-    button(int x, int y, int width, int hight, SWWight::button_interact_mode mode);
+
+    /// @brief The constructor of Button
+    /// @param x x position(upper left corner)
+    /// @param y y position(upper left corner)
+    /// @param width the width of Button
+    /// @param hight the height of Button
+    /// @param mode  the interact mode of button(PRESS, SELECT)
+    button(int x, int y, int width, int hight,
+           SWWight::button_interact_mode mode);
+
+    /// @brief The constructor of Button
+    /// @param x x position(upper left corner)
+    /// @param y y position(upper left corner)
+    /// @param width the width of Button
+    /// @param hight the height of Button
+    /// @param mode  the interact mode of button(PRESS, SELECT)
     button(int x, int y, int width, int hight, button_interact_mode mode,
            const char *hex_color);
-    button(int x, int y, int width, int hight, button_interact_mode mode, int r, int g,
-           int b);
+
+    /// @brief The constructor of Button
+    /// @param x x position(upper left corner)
+    /// @param y y position(upper left corner)
+    /// @param width the width of Button
+    /// @param hight the height of Button
+    /// @param mode the interact mode of button(PRESS, SELECT)
+    button(int x, int y, int width, int hight, button_interact_mode mode, int r,
+           int g, int b);
 
     /// @brief set the size of button
     /// @param width  unit is pixel

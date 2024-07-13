@@ -75,16 +75,17 @@ void panel::display() {
     int indicator_end_y_pos =
         chart_center_y - (chart_radius - outline_width) * sin(indicator_angle);
 
-    // draw outline
+    // draw panel's shape
+    SWWBrain.Screen.setPenWidth(outline_width);
     SWWBrain.Screen.setPenColor(outline_color);
-    SWWBrain.Screen.setFillColor(outline_color);
+    SWWBrain.Screen.setFillColor(panel_backgroud_color);
     SWWBrain.Screen.drawCircle(chart_center_x, chart_center_y, chart_radius);
 
-    // draw the backgroud
-    SWWBrain.Screen.setPenColor(panel_backgroud_color);
-    SWWBrain.Screen.setFillColor(panel_backgroud_color);
-    SWWBrain.Screen.drawCircle(chart_center_x, chart_center_y,
-                            chart_radius - outline_width);
+    // draw the indicator
+    SWWBrain.Screen.setPenColor(indicator_color);
+    SWWBrain.Screen.setPenWidth(indicator_width);
+    SWWBrain.Screen.drawLine(chart_center_x, chart_center_y,
+                             indicator_end_x_pos, indicator_end_y_pos);
 
     // draw the data label
     if (data_label_render) {
@@ -101,10 +102,4 @@ void panel::display() {
         SWWBrain.Screen.printAt(data_label_x, data_label_y, data_label);
         delete[] data_label;  // release memory of data_label
     }
-
-    // draw the indicator
-    SWWBrain.Screen.setPenColor(indicator_color);
-    SWWBrain.Screen.setPenWidth(indicator_width);
-    SWWBrain.Screen.drawLine(chart_center_x, chart_center_y, indicator_end_x_pos,
-                          indicator_end_y_pos);
 }

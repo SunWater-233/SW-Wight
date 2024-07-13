@@ -13,6 +13,10 @@ class buttonGroup {
     int selected_button_max = 1;
 
    public:
+    /// @brief The constructor of ButtonGroup
+    /// @param button_group A vector made of the pointers of buttons
+    /// @param selected_max Maximum number of buttons that can be selected at
+    /// one time
     buttonGroup(std::vector<button *> button_group, int selected_max = 1);
 
     /// @brief move every button in the group by the vaules you type

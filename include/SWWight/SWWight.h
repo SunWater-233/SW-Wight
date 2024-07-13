@@ -6,7 +6,8 @@
 #include "SWWight/Widget/panel.h"
 #include "SWWight/Widget/slider.h"
 
-
+// define some functions that should be runned outside of the SWWight library
+namespace SWWight {
 extern void logic_runner();
 extern void render_runner();
-
+}  // namespace SWWight

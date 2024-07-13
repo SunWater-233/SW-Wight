@@ -81,3 +81,45 @@ char* DevelopTool::int_to_char(int value) {
 
     return result;
 }
+
+DevelopTool::PressDetector::PressDetector(int x1, int y1, int x2, int y2) {
+    x_detect_range[0] = x1;
+    x_detect_range[1] = x2;
+
+    y_detect_range[0] = y1;
+    y_detect_range[1] = y2;
+}
+
+void DevelopTool::PressDetector::set_x_detect_range(int x1, int x2) {
+    x_detect_range[0] = x1;
+    x_detect_range[1] = x2;
+}
+
+void DevelopTool::PressDetector::set_y_detect_range(int y1, int y2) {
+    y_detect_range[0] = y1;
+    y_detect_range[1] = y2;
+}
+
+bool DevelopTool::PressDetector::area_pressing() {
+    if (!SWWBrain.Screen.pressing()) {
+        return false;
+    }
+
+    x_press_postion = SWWBrain.Screen.xPosition();
+    y_press_postion = SWWBrain.Screen.yPosition();
+
+    bool x_condition = x_press_postion >= x_detect_range[0] &&
+                       x_press_postion <= x_detect_range[1];
+    bool y_condition = y_press_postion >= y_detect_range[0] &&
+                       y_press_postion <= y_detect_range[1];
+
+    return x_condition && y_condition;
+}
+
+std::array<int, 2> DevelopTool::PressDetector::get_press_position() {
+    if (!area_pressing()) {
+        return {-1, -1};
+    }
+
+    return {x_press_postion, y_press_postion};
+}

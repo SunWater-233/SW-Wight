@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <cstring>
 #include <sstream>
 #include <vector>
@@ -7,23 +8,30 @@
 #include "vex.h"
 
 namespace SWWight {
-extern vex::brain SWWBrain;
 
 #define PI 3.14159
 
-/// @brief There are to interact modes.
-/// PRESS: The button can be pressed.
-/// SELECT: The button can selected.
+extern vex::brain SWWBrain;
+
+/// @brief There are two interact modes for Button
+/// PRESS: The button can be pressed
+/// SELECT: The button can selected
 enum button_interact_mode { PRESS, SELECT };
 
-/// @brief There is two display mode.
+/// @brief There is two display modes for Graph
 /// STAY: All the data will remain in the graph, and zoom rate will change
 /// accroding to the data. PASS: There will only be some data in the graph, and
 /// the rest of data will be deleted.
 enum graph_display_mode { STAY, PASS };
 
+/// @brief There are two line styles
+/// LINE: The graph's data will be presented as a line
+/// DOT: The graph's data will be presented as dots
 enum graph_line_style { LINE, DOT };
 
+/// @brief There are two layout mode for Slider
+/// VERTICAL: The slider will be placed vertically
+/// HORIZONTAL: The slider will be placed horizontally
 enum slider_layout_mode { VERTICAL, HORIZONTAL };
 
 class DevelopTool {
@@ -93,6 +101,23 @@ class DevelopTool {
     /// @param value
     /// @return a value in char* type
     char *int_to_char(int value);
+
+    class PressDetector {
+       private:
+        int x_detect_range[2] = {0, 0};
+        int y_detect_range[2] = {0, 0};
+
+        int x_press_postion = -1;
+        int y_press_postion = -1;
+
+       public:
+        PressDetector(int x1, int y1, int x2, int y2);
+        void set_x_detect_range(int x1, int x2);
+        void set_y_detect_range(int y1, int y2);
+
+        bool area_pressing();
+        std::array<int, 2> get_press_position();
+    };
 };
 
 extern DevelopTool SWWTool;

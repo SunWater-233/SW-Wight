@@ -38,6 +38,12 @@ class panel {
     void set_data_label_width_height();
 
    public:
+    /// @brief The constructor of Panel
+    /// @param x x position(upper left corner)
+    /// @param y y position(upper left corner)
+    /// @param radius the radius of the panel
+    /// @param data_lim_min the minimum value the panel should receive
+    /// @param data_lim_max the maximum value the panel should receive
     panel(int x, int y, int radius, float data_lim_min, float data_lim_max);
 
     /// @brief transfer the data into the

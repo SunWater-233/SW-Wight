@@ -30,10 +30,18 @@ class slider {
     int rounded_corner_x, rounded_corner_y;
     int rounded_corner_radius;
 
-    bool determine_slider_pressing();
+    DevelopTool::PressDetector SliderPressDetector;
     void update_dot_data();
 
    public:
+    /// @brief The constructor of Slider
+    /// @param x x position(upper left corner)
+    /// @param y y position(upper left corner)
+    /// @param width the width of Slider
+    /// @param height the height of Slider
+    /// @param layout the layout pattern(VERTICAL, HORIZONTAL)
+    /// @param value_min the minimum value the slider can return
+    /// @param value_max the maximum value the slider can return
     slider(int x, int y, int width, int height, slider_layout_mode layout,
            float value_min, float value_max);
 

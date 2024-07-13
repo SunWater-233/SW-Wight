@@ -10,7 +10,11 @@ slider::slider(int x, int y, int width, int height, slider_layout_mode layout,
       slider_height(height),
       slider_layout(layout),
       slider_capacity_min(value_min),
-      slider_capacity_max(value_max) {
+      slider_capacity_max(value_max),
+      SliderPressDetector(slider_x, slider_y, slider_x + slider_width,
+                          slider_height)
+
+{
     if (slider_layout == VERTICAL) {
         slider_dot_x = x + width / 2;
         slider_dot_y = y;
@@ -48,31 +52,18 @@ slider::slider(int x, int y, int width, int height, slider_layout_mode layout,
     set_outline_width(3);
 }
 
-bool slider::determine_slider_pressing() {
-    if (!SWWBrain.Screen.pressing()) {
-        return false;
-    }
-
-    int x_press = SWWBrain.Screen.xPosition();
-    int y_press = SWWBrain.Screen.yPosition();
-    bool x_condition =
-        x_press >= slider_x && x_press <= slider_x + slider_width;
-    bool y_condition =
-        y_press >= slider_y && y_press <= slider_y + slider_height;
-
-    return x_condition && y_condition;
-}
-
 void slider::update_dot_data() {
-    if (!determine_slider_pressing()) {
+    if (!SliderPressDetector.area_pressing()) {
         return;
     }
-    int x_press = SWWBrain.Screen.xPosition();
-    int y_press = SWWBrain.Screen.yPosition();
+    int x_press = SliderPressDetector.get_press_position()[0];
+    int y_press = SliderPressDetector.get_press_position()[1];
 
+    // the round function is used here to avoid zero rounding 
     if (slider_layout == VERTICAL) {
         slider_dot_y = y_press;
-        value_proportionality = (slider_dot_y - slider_y) / slider_height;
+        value_proportionality =
+            (slider_dot_y - slider_y) / round(slider_height);
 
     } else if (slider_layout == HORIZONTAL) {
         slider_dot_x = x_press;

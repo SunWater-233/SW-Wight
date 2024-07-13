@@ -74,6 +74,13 @@ class graph {
     graph *get_pointer_of_this_instance();
 
    public:
+    /// @brief The constructor of Graph
+    /// @param x x position(upper left corner)
+    /// @param y y position(upper left corner)
+    /// @param width the width of Slider
+    /// @param height the height of Slider
+    /// @param style the style pattern(LINE, DOT)
+    /// @param mode the display mode(STAY, PASS)
     graph(int x, int y, int width, int height, graph_line_style style,
           graph_display_mode mode = STAY);
 

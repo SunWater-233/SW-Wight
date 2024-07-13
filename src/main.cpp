@@ -16,8 +16,8 @@ using namespace vex;
 competition Competition;
 
 void pre_auton(void) {
-    logic_runner();
-    render_runner();
+    SWWight::logic_runner();
+    SWWight::render_runner();
 
 }
 

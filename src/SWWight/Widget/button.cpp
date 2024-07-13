@@ -9,7 +9,11 @@ button::button(int x, int y, int width, int hight,
       button_y(y),
       button_width(width),
       button_height(hight),
-      button_interact(mode) {
+      button_interact(mode),
+      ButtonPressDetector(button_x, button_y, button_x + button_width,
+                          button_y + button_height)
+
+{
     set_button_default_color(SWWColor.alizarin);
     set_button_selected_color(SWWColor.peter_river);
     set_outline_default_color(SWWColor.clouds);
@@ -22,7 +26,9 @@ button::button(int x, int y, int width, int hight, button_interact_mode mode,
       button_y(y),
       button_width(width),
       button_height(hight),
-      button_interact(mode)
+      button_interact(mode),
+      ButtonPressDetector(button_x, button_y, button_x + button_width,
+                          button_y + button_height)
 
 {
     set_button_default_color(hex_color);
@@ -37,7 +43,11 @@ button::button(int x, int y, int width, int hight, button_interact_mode mode,
       button_y(y),
       button_width(width),
       button_height(hight),
-      button_interact(mode) {
+      button_interact(mode),
+      ButtonPressDetector(button_x, button_y, button_x + button_width,
+                          button_y + button_height)
+
+{
     set_button_default_color(r, g, b);
     set_button_selected_color(SWWColor.peter_river);
     set_outline_default_color(SWWColor.clouds);
@@ -47,11 +57,17 @@ button::button(int x, int y, int width, int hight, button_interact_mode mode,
 void button::set_button_size(int width, int height) {
     button_width = width;
     button_height = height;
+
+    ButtonPressDetector.set_x_detect_range(button_x, button_x + button_width);
+    ButtonPressDetector.set_y_detect_range(button_y, button_y + button_height);
 }
 
 void button::set_button_position(int x, int y) {
     button_x = x;
     button_y = y;
+
+    ButtonPressDetector.set_x_detect_range(button_x, button_x + button_width);
+    ButtonPressDetector.set_y_detect_range(button_y, button_y + button_height);
 }
 
 void button::set_button_default_color(const char *hex_color) {
@@ -104,20 +120,7 @@ bool button::determine_selected() {
 }
 
 bool button::determine_pressing() {
-    if (!Brain.Screen.pressing()) {
-        pressing_state = false;
-        return false;
-    }
-
-    int x_press = Brain.Screen.xPosition();
-    int y_press = Brain.Screen.yPosition();
-    bool x_condition =
-        x_press >= button_x && x_press <= button_x + button_width;
-    bool y_condition =
-        y_press >= button_y && y_press <= button_y + button_height;
-
-    pressing_state = x_condition && y_condition;
-    return pressing_state;
+    return ButtonPressDetector.area_pressing();
 }
 
 bool button::get_selected_state() { return selected_state; }
@@ -137,17 +140,10 @@ void button::display() {
         outline_display_color = outline_default_color;
     }
 
-    // draw outline
+    // draw the button
+    SWWBrain.Screen.setPenWidth(button_outline_width);
     SWWBrain.Screen.setPenColor(outline_display_color);
-    SWWBrain.Screen.setFillColor(outline_display_color);
+    SWWBrain.Screen.setFillColor(button_display_color);
     SWWBrain.Screen.drawRectangle(button_x, button_y, button_width,
                                   button_height);
-
-    // draw button
-    SWWBrain.Screen.setPenColor(button_display_color);
-    SWWBrain.Screen.setFillColor(button_display_color);
-    SWWBrain.Screen.drawRectangle(button_x + button_outline_width,
-                                  button_y + button_outline_width,
-                                  button_width - 2 * button_outline_width,
-                                  button_height - 2 * button_outline_width);
 }

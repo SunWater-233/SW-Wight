@@ -1,5 +1,14 @@
 #include "SWWight/SWWight.h"
 
+// declare some functions here
+int logic();
+int render();
+
+namespace SWWight {
+void logic_runner() { vex::task SWWLogic(logic); }
+void render_runner() { vex::task SWWrender(render); }
+}  // namespace SWWight
+
 using namespace SWWight;
 
 // declare your wight here ↓
@@ -16,7 +25,7 @@ panel TestPanel(20, 20, 50, -100, 100);
 
 slider TestSlider(30, 150, 120, 15, HORIZONTAL, 0, 100);
 
-// if you don't kown what the constructors↑ above mean,
+// If you don't kown what the constructors↑ above mean,
 // check the corresponding header files.
 
 int logic() {
@@ -66,6 +75,7 @@ int logic() {
     }
 }
 
+// If you want to display your widgets, write your render code here↓
 int render() {
     // set your wight here ↓
     TestPanel.set_data_label_font(mono20);
@@ -83,14 +93,10 @@ int render() {
             TestSlider.display();
 
             // make sure everything render at the same time
-            // SWWBrain.Screen.render();
-            // set the fps(fps setting could be seen in SWWTool.h)
             SWWBrain.Screen.render();
+            // set the fps(fps setting could be seen in SWWTool.h)
             wait(SWWTool.get_frame_pause_time(), msec);
         }
         wait(SWWTool.get_frame_pause_time(), msec);
     }
 }
-
-void logic_runner() { vex::task SWWLogic(logic); }
-void render_runner() { vex::task SWWrender(render); }
