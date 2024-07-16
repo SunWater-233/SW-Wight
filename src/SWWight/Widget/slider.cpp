@@ -15,6 +15,39 @@ slider::slider(int x, int y, int width, int height, slider_layout_mode layout,
                           slider_height)
 
 {
+    calculate_drawing_dots_data(x, y, width, height);
+
+    set_fill_color(SWWColor.peter_river);
+    set_outline_color(SWWColor.clouds);
+    set_dot_color(SWWColor.carrot);
+
+    set_outline_width(3);
+}
+
+void slider::update_dot_data() {
+    if (!SliderPressDetector.area_pressing()) {
+        return;
+    }
+    int x_press = SliderPressDetector.get_press_position()[0];
+    int y_press = SliderPressDetector.get_press_position()[1];
+
+    // the round function is used here to avoid zero rounding
+    if (slider_layout == VERTICAL) {
+        slider_dot_y = y_press;
+        value_proportionality =
+            (slider_dot_y - slider_y) / round(slider_height);
+
+    } else if (slider_layout == HORIZONTAL) {
+        slider_dot_x = x_press; 
+        value_proportionality = (slider_dot_x - slider_x) / round(slider_width);
+    }
+
+    slider_current_value =
+        value_proportionality * (slider_capacity_max - slider_capacity_min) +
+        slider_capacity_min;
+}
+
+void slider::calculate_drawing_dots_data(int x, int y, int width, int height) {
     if (slider_layout == VERTICAL) {
         slider_dot_x = x + width / 2;
         slider_dot_y = y;
@@ -44,35 +77,22 @@ slider::slider(int x, int y, int width, int height, slider_layout_mode layout,
         rounded_corner_y = y + height / 2;
         rounded_corner_radius = height / 2;
     }
-
-    set_fill_color(SWWColor.peter_river);
-    set_outline_color(SWWColor.clouds);
-    set_dot_color(SWWColor.carrot);
-
-    set_outline_width(3);
 }
 
-void slider::update_dot_data() {
-    if (!SliderPressDetector.area_pressing()) {
-        return;
-    }
-    int x_press = SliderPressDetector.get_press_position()[0];
-    int y_press = SliderPressDetector.get_press_position()[1];
+void slider::set_slider_position(int x, int y) {
+    slider_x = x;
+    slider_y = y;
 
-    // the round function is used here to avoid zero rounding 
-    if (slider_layout == VERTICAL) {
-        slider_dot_y = y_press;
-        value_proportionality =
-            (slider_dot_y - slider_y) / round(slider_height);
+    calculate_drawing_dots_data(slider_x, slider_y, slider_width,
+                                slider_height);
+}
 
-    } else if (slider_layout == HORIZONTAL) {
-        slider_dot_x = x_press;
-        value_proportionality = (slider_dot_x - slider_x) / round(slider_width);
-    }
+void slider::set_slider_size(int width, int height) {
+    slider_width = width;
+    slider_height = height;
 
-    slider_current_value =
-        value_proportionality * (slider_capacity_max - slider_capacity_min) +
-        slider_capacity_min;
+    calculate_drawing_dots_data(slider_x, slider_y, slider_width,
+                                slider_height);
 }
 
 void slider::set_fill_color(const char *hex_color) {

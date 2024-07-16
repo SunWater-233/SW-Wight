@@ -1,7 +1,5 @@
 #include "SWWight/Widget/buttonGroup.h"
 
-#include "algorithm"
-
 using namespace SWWight;
 
 /// --------------Button Class Functions--------------
@@ -10,6 +8,16 @@ buttonGroup::buttonGroup(std::vector<button *> button_group, int selected_max)
       selected_button_max(selected_max)
 
 {}
+
+void buttonGroup::add_button(button *button_to_add) {
+    button_member.push_back(button_to_add);
+}
+
+void buttonGroup::add_button(std::vector<button *> button_vec) {
+    for (int i = 0; i < button_vec.size(); i++) {
+        button_member.push_back(button_vec[i]);
+    }
+}
 
 void buttonGroup::set_button_group_position(int delta_x, int delta_y) {
     for (int i = 0; i < button_member.size(); i++) {
@@ -63,17 +71,17 @@ std::vector<int> buttonGroup::determine_selected_button() {
     int pressing_button_index = determine_pressing_button();
 
     if (pressing_button_index != -1) {
-        // check whether the button is in the vector
-        // if it is in the vector, delete it
-        // to make sure the selectedbutton can turn unselected
+        // check whether the button is in the vector or not
         std::vector<int>::iterator it =
             std::find(selected_button_index.begin(),
                       selected_button_index.end(), pressing_button_index);
+        // if the button has been already selected, unselect it
         if (it != selected_button_index.end()) {
+            button_member[*it]->set_select_state(false);
             selected_button_index.erase(it);
         }
 
-        // check whether the button is selected or not
+        // if the button is selected now, push it into the vector
         else if (button_member[pressing_button_index]->determine_selected()) {
             selected_button_index.push_back(pressing_button_index);
         }

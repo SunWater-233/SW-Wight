@@ -5,7 +5,11 @@ using namespace SWWight;
 panel::panel(int x, int y, int radius, float data_lim_min, float data_lim_max)
     : panel_x_position(x),
       panel_y_position(y),
+
       chart_radius(radius),
+      chart_center_x(panel_x_position + chart_radius),
+      chart_center_y(panel_y_position + chart_radius),
+
       data_lim_min(data_lim_min),
       data_lim_max(data_lim_max)
 
@@ -20,6 +24,20 @@ void panel::set_data_label_width_height() {
     data_label_width = SWWTool.get_character_width(data_label, data_label_font);
     data_label_height =
         SWWTool.get_character_height(data_label, data_label_font);
+}
+
+void panel::set_panel_position(int x, int y) {
+    panel_x_position = x;
+    panel_y_position = y;
+
+    chart_center_x = panel_x_position + chart_radius;
+    chart_center_y = panel_y_position + chart_radius;
+}
+
+void panel::set_panel_radius(int radius) {
+    chart_radius = radius;
+    chart_center_x = panel_x_position + chart_radius;
+    chart_center_y = panel_y_position + chart_radius;
 }
 
 void panel::set_panel_data(int data) {

@@ -19,6 +19,14 @@ class buttonGroup {
     /// one time
     buttonGroup(std::vector<button *> button_group, int selected_max = 1);
 
+    /// @brief add single button to the ButtonGroup
+    /// @param button_to_add the reference of a button
+    void add_button(button* button_to_add);
+
+    /// @brief add numerous buttons into the ButtonGroup
+    /// @param button_vec a vector of the references of buttons 
+    void add_button(std::vector<button *> button_vec);
+
     /// @brief move every button in the group by the vaules you type
     /// @param delta_x the amount of pixels you want to move on the X direct
     /// @param delta_y the amount of pixels you want to move on the X direct

@@ -32,6 +32,7 @@ class slider {
 
     DevelopTool::PressDetector SliderPressDetector;
     void update_dot_data();
+    void calculate_drawing_dots_data(int x, int y, int width, int height);
 
    public:
     /// @brief The constructor of Slider
@@ -44,6 +45,16 @@ class slider {
     /// @param value_max the maximum value the slider can return
     slider(int x, int y, int width, int height, slider_layout_mode layout,
            float value_min, float value_max);
+
+    /// @brief set the position of the panel
+    /// @param x unit is pixel
+    /// @param y unit is pixel
+    void set_slider_position(int x, int y);
+
+    /// @brief set the size of slider
+    /// @param width unit is pixel
+    /// @param height unit is pixel
+    void set_slider_size(int width, int height);
 
     /// @brief set the fill color of the slider
     /// @param hex_color require const char type

@@ -71,7 +71,7 @@ class graph {
     /// @brief display data in the form of dots
     void display_with_dot();
 
-    graph *get_pointer_of_this_instance();
+    graph* get_pointer_of_this_instance();
 
    public:
     /// @brief The constructor of Graph
@@ -93,9 +93,10 @@ class graph {
     /// @param space unit is pixel
     void set_x_pass_pixel_per_frame(int space);
 
-    /// @brief set the width of line or dots in the graph
-    /// @param space unit is pixel
-    void set_graph_width(int width);
+    /// @brief set the size of the graph
+    /// @param width unit is pixel
+    /// @param height unit is pixel
+    void set_graph_size(int width, int height);
 
     /// @brief set the color of line or dots in the graph
     /// @param hex_color require const char type

@@ -129,7 +129,10 @@ void graph::set_x_pass_pixel_per_frame(int pixel) {
     x_pass_pixel_per_frame = pixel;
 }
 
-void graph::set_graph_width(int width) { graph_line_width = width; }
+void graph::set_graph_size(int width, int height) {
+    graph_width = width;
+    graph_height = height;
+}
 
 void graph::set_graph_color(const char* hex_color) {
     graph_color.web(hex_color);
