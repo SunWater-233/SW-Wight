@@ -120,6 +120,11 @@ bool button::determine_selected() {
 }
 
 bool button::determine_pressing() {
+    if (ButtonPressDetector.area_pressing()) {
+        pressing_state = true;
+    } else {
+        pressing_state = false;
+    }
     return ButtonPressDetector.area_pressing();
 }
 

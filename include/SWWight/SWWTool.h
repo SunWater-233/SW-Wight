@@ -4,13 +4,12 @@
 #include <array>
 #include <cstring>
 #include <sstream>
+#include <string>
 #include <vector>
 
 #include "vex.h"
 
 namespace SWWight {
-
-#define PI 3.14159
 
 extern vex::brain SWWBrain;
 
@@ -120,8 +119,53 @@ class DevelopTool {
         std::array<int, 2> get_press_position();
     };
 };
-
 extern DevelopTool SWWTool;
+
+class DrawGeometry {
+   private:
+    color fill_color;
+    color outline_color;
+
+    int outline_width = 3;
+
+    std::array<float, 2> rotate_coordinate(float origin_x, float origin_y,
+                                           float x, float y,
+                                           float rotation_angle);
+    std::array<float, 2> rotate_coordinate(float x, float y,
+                                           float rotation_angle);
+
+    std::array<float, 2> move_coordinate(float delta_x, float delta_y,
+                                         std::array<float, 2> dot);
+
+   public:
+    DrawGeometry();
+
+    /// @brief set the fill color
+    /// @param hex_color require const char type
+    void set_fill_color(const char *hex_color);
+
+    /// @brief et the fill color
+    /// @param r
+    /// @param g
+    /// @param b
+    void set_fill_color(int r, int g, int b);
+
+    /// @brief set the outline color
+    /// @param hex_color require const char type
+    void set_outline_color(const char *hex_color);
+
+    /// @brief et the outline color
+    /// @param r
+    /// @param g
+    /// @param b
+    void set_outline_color(int r, int g, int b);
+
+    void set_outline_width(int width);
+
+    void draw_ellipse(int center_x, int center_y, int short_axis_length,
+                      int long_axis_length, int rotation_angle = 0);
+};
+extern DrawGeometry SWWGeometry;
 
 // color below is from https://flatuicolors.com/palette/defo
 class SWWHexColor {

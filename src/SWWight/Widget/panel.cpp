@@ -42,7 +42,7 @@ void panel::set_panel_radius(int radius) {
 
 void panel::set_panel_data(int data) {
     panel_data = data;
-    indicator_angle = data / fabs(data_lim_max - data_lim_min) * 2 * PI;
+    indicator_angle = data / fabs(data_lim_max - data_lim_min) * 2 * M_PI;
 }
 
 void panel::set_panel_data_min(float min_lim) { data_lim_min = min_lim; }
@@ -99,12 +99,6 @@ void panel::display() {
     SWWBrain.Screen.setFillColor(panel_backgroud_color);
     SWWBrain.Screen.drawCircle(chart_center_x, chart_center_y, chart_radius);
 
-    // draw the indicator
-    SWWBrain.Screen.setPenColor(indicator_color);
-    SWWBrain.Screen.setPenWidth(indicator_width);
-    SWWBrain.Screen.drawLine(chart_center_x, chart_center_y,
-                             indicator_end_x_pos, indicator_end_y_pos);
-
     // draw the data label
     if (data_label_render) {
         data_label = SWWTool.int_to_char(panel_data);
@@ -119,5 +113,11 @@ void panel::display() {
 
         SWWBrain.Screen.printAt(data_label_x, data_label_y, data_label);
         delete[] data_label;  // release memory of data_label
+        
+    // draw the indicator
+    SWWBrain.Screen.setPenColor(indicator_color);
+    SWWBrain.Screen.setPenWidth(indicator_width);
+    SWWBrain.Screen.drawLine(chart_center_x, chart_center_y,
+                             indicator_end_x_pos, indicator_end_y_pos);
     }
 }

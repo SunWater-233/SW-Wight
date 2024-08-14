@@ -39,6 +39,7 @@
 		"string": "cpp",
 		"algorithm": "cpp",
 		"numeric": "cpp",
-		"cstring": "cpp"
+		"cstring": "cpp",
+		"iostream": "cpp"
 	}
 }

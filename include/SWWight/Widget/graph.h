@@ -44,10 +44,10 @@ class graph {
     // basic variables of the axis
     int axis_width = 2;
     int axis_triangle_length = 10;
-    float axis_triangle_angle = PI / 6;
+    float axis_triangle_angle = M_PI / 6;
     color axis_color;
 
-    void draw_axis();
+    void draw_axis();   
 
     /// @brief draw dots with specific width
     /// @param x unit is pixel

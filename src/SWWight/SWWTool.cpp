@@ -4,6 +4,7 @@
 namespace SWWight {
 vex::brain SWWBrain;
 DevelopTool SWWTool;
+DrawGeometry SWWGeometry;
 SWWHexColor SWWColor;
 }  // namespace SWWight
 
@@ -122,4 +123,108 @@ std::array<int, 2> DevelopTool::PressDetector::get_press_position() {
     }
 
     return {x_press_postion, y_press_postion};
+}
+
+DrawGeometry::DrawGeometry() {
+    fill_color.web(SWWColor.midnight_blue);
+    outline_color.web(SWWColor.clouds);
+}
+
+std::array<float, 2> DrawGeometry::rotate_coordinate(float origin_x,
+                                                     float origin_y, float x,
+                                                     float y,
+                                                     float rotation_angle) {
+    // 将角度转换为弧度
+    float radian = rotation_angle * M_PI / 180.0;
+
+    // 平移点，使旋转中心变为原点
+    float x_prime = x - origin_x;
+    float y_prime = y - origin_y;
+
+    // 旋转点
+    float x_rotated = x_prime * cos(radian) - y_prime * sin(radian);
+    float y_rotated = x_prime * sin(radian) + y_prime * cos(radian);
+
+    // 平移回原始坐标系
+    float x_final = x_rotated + origin_x;
+    float y_final = y_rotated + origin_y;
+
+    return {x_final, y_final};
+}
+
+std::array<float, 2> DrawGeometry::rotate_coordinate(float x, float y,
+                                                     float rotation_angle) {
+    return rotate_coordinate(0, 0, x, y, rotation_angle);
+}
+
+std::array<float, 2> DrawGeometry::move_coordinate(float delta_x, float delta_y,
+                                                   std::array<float, 2> dot) {
+    return {dot[0] + delta_x, dot[1] + delta_y};
+}
+
+void DrawGeometry::set_fill_color(const char* hex_color) {
+    fill_color.web(hex_color);
+}
+
+void DrawGeometry::set_fill_color(int r, int g, int b) {
+    fill_color = SWWTool.rgb_to_vex_color(r, g, b);
+}
+
+void DrawGeometry::set_outline_color(const char* hex_color) {
+    outline_color.web(hex_color);
+}
+
+void DrawGeometry::set_outline_color(int r, int g, int b) {
+    outline_color = SWWTool.rgb_to_vex_color(r, g, b);
+}
+
+void DrawGeometry::set_outline_width(int width) { outline_width = width; }
+
+void DrawGeometry::draw_ellipse(int center_x, int center_y,
+                                int short_axis_length, int long_axis_length,
+                                int rotation_angle) {
+    float a = long_axis_length / 2;
+    float b = short_axis_length / 2;
+
+    // 绘制椭圆轮廓
+    SWWBrain.Screen.setPenColor(outline_color);
+    for (int y = -b; y <= b; y++) {
+        // 计算椭圆边界上的x值
+        float x_boundary = a * sqrt(1 - (y * y) / (float)(b * b));
+
+        std::array<float, 2> dot_left_rotated =
+            rotate_coordinate(-x_boundary, y, rotation_angle);
+        std::array<float, 2> dot_right_rotated =
+            rotate_coordinate(x_boundary, y, rotation_angle);
+
+        std::array<float, 2> dot_left_moved =
+            move_coordinate(center_x, center_y, dot_left_rotated);
+        std::array<float, 2> dot_right_moved =
+            move_coordinate(center_x, center_y, dot_right_rotated);
+
+        SWWBrain.Screen.drawLine(dot_left_moved[0], dot_left_moved[1],
+                                 dot_right_moved[0], dot_right_moved[1]);
+    }
+    // 绘制椭圆内部
+    a = a - outline_width / 2;
+    b = b - outline_width / 2;
+
+    SWWBrain.Screen.setPenColor(fill_color);
+    for (int y = -b; y <= b; y++) {
+        // 计算椭圆边界上的x值
+        float x_boundary = a * sqrt(1 - (y * y) / (float)(b * b));
+
+        std::array<float, 2> dot_left_rotated =
+            rotate_coordinate(-x_boundary, y, rotation_angle);
+        std::array<float, 2> dot_right_rotated =
+            rotate_coordinate(x_boundary, y, rotation_angle);
+
+        std::array<float, 2> dot_left_moved =
+            move_coordinate(center_x, center_y, dot_left_rotated);
+        std::array<float, 2> dot_right_moved =
+            move_coordinate(center_x, center_y, dot_right_rotated);
+
+        SWWBrain.Screen.drawLine(dot_left_moved[0], dot_left_moved[1],
+                                 dot_right_moved[0], dot_right_moved[1]);
+    }
 }
