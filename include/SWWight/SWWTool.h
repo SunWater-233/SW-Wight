@@ -13,6 +13,8 @@ namespace SWWight {
 
 extern vex::brain SWWBrain;
 
+#define GOLDEN_RATIO 0.618
+
 /// @brief There are two interact modes for Button
 /// PRESS: The button can be pressed
 /// SELECT: The button can selected
@@ -141,6 +143,10 @@ class DrawGeometry {
     DrawGeometry();
 
     /// @brief set the fill color
+    /// @param hex_color require color type
+    void set_fill_color(color vex_color);
+
+    /// @brief set the fill color
     /// @param hex_color require const char type
     void set_fill_color(const char *hex_color);
 
@@ -151,10 +157,14 @@ class DrawGeometry {
     void set_fill_color(int r, int g, int b);
 
     /// @brief set the outline color
+    /// @param hex_color require color type
+    void set_outline_color(color vex_color);
+
+    /// @brief set the outline color
     /// @param hex_color require const char type
     void set_outline_color(const char *hex_color);
 
-    /// @brief et the outline color
+    /// @brief set the outline color
     /// @param r
     /// @param g
     /// @param b
@@ -163,7 +173,17 @@ class DrawGeometry {
     void set_outline_width(int width);
 
     void draw_ellipse(int center_x, int center_y, int short_axis_length,
-                      int long_axis_length, int rotation_angle = 0);
+                      int long_axis_length, int rotation_angle = 0,
+                      bool outline = true);
+
+    void draw_rectangle(int x, int y, int width, int height,
+                        bool outline = true);
+    void draw_circle(int center_x, int center_y, int radiusm,
+                     bool outline = true);
+    void draw_rectangle_with_arch(int x, int y, int width, int height,
+                                  int radiusm, bool outline = true);
+    void draw_rectangle_with_arch(int x, int y, int width, int height,
+                                  bool outline = true);
 };
 extern DrawGeometry SWWGeometry;
 

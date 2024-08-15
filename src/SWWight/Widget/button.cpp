@@ -146,9 +146,13 @@ void button::display() {
     }
 
     // draw the button
-    SWWBrain.Screen.setPenWidth(button_outline_width);
-    SWWBrain.Screen.setPenColor(outline_display_color);
-    SWWBrain.Screen.setFillColor(button_display_color);
-    SWWBrain.Screen.drawRectangle(button_x, button_y, button_width,
-                                  button_height);
+    // SWWBrain.Screen.setPenWidth(button_outline_width);
+    // SWWBrain.Screen.setPenColor(outline_display_color);
+    // SWWBrain.Screen.setFillColor(button_display_color);
+    // SWWBrain.Screen.drawRectangle(button_x, button_y, button_width,
+    //                               button_height);
+
+    SWWGeometry.set_fill_color(button_display_color);
+    SWWGeometry.set_outline_width(outline_display_color);
+    SWWGeometry.draw_rectangle(button_x, button_y, button_width, button_height, true);
 }

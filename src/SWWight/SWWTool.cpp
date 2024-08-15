@@ -162,12 +162,18 @@ std::array<float, 2> DrawGeometry::move_coordinate(float delta_x, float delta_y,
     return {dot[0] + delta_x, dot[1] + delta_y};
 }
 
+void DrawGeometry::set_fill_color(color vex_color) { fill_color = vex_color; }
+
 void DrawGeometry::set_fill_color(const char* hex_color) {
     fill_color.web(hex_color);
 }
 
 void DrawGeometry::set_fill_color(int r, int g, int b) {
     fill_color = SWWTool.rgb_to_vex_color(r, g, b);
+}
+
+void DrawGeometry::set_outline_color(color vex_color) {
+    outline_color = vex_color;
 }
 
 void DrawGeometry::set_outline_color(const char* hex_color) {
@@ -182,9 +188,14 @@ void DrawGeometry::set_outline_width(int width) { outline_width = width; }
 
 void DrawGeometry::draw_ellipse(int center_x, int center_y,
                                 int short_axis_length, int long_axis_length,
-                                int rotation_angle) {
+                                int rotation_angle, bool outline) {
     float a = long_axis_length / 2;
     float b = short_axis_length / 2;
+    int outline_width_tmp = outline_width;
+
+    if (!outline) {
+        outline_width_tmp = 0;
+    }
 
     // 绘制椭圆轮廓
     SWWBrain.Screen.setPenColor(outline_color);
@@ -206,8 +217,8 @@ void DrawGeometry::draw_ellipse(int center_x, int center_y,
                                  dot_right_moved[0], dot_right_moved[1]);
     }
     // 绘制椭圆内部
-    a = a - outline_width / 2;
-    b = b - outline_width / 2;
+    a = a - outline_width_tmp / 2;
+    b = b - outline_width_tmp / 2;
 
     SWWBrain.Screen.setPenColor(fill_color);
     for (int y = -b; y <= b; y++) {
@@ -227,4 +238,79 @@ void DrawGeometry::draw_ellipse(int center_x, int center_y,
         SWWBrain.Screen.drawLine(dot_left_moved[0], dot_left_moved[1],
                                  dot_right_moved[0], dot_right_moved[1]);
     }
+}
+
+void DrawGeometry::draw_rectangle(int x, int y, int width, int height,
+                                  bool outline) {
+    if (outline) {
+        SWWBrain.Screen.setPenWidth(outline_width);
+    } else {
+        SWWBrain.Screen.setPenWidth(0);
+    }
+
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(fill_color);
+    SWWBrain.Screen.drawRectangle(x, y, width, height);
+}
+void DrawGeometry::draw_circle(int center_x, int center_y, int radiusm,
+                               bool outline) {
+    if (outline) {
+        SWWBrain.Screen.setPenWidth(outline_width);
+    } else {
+        SWWBrain.Screen.setPenWidth(0);
+    }
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(fill_color);
+    SWWBrain.Screen.drawCircle(center_x, center_y, radiusm);
+}
+
+void DrawGeometry::draw_rectangle_with_arch(int x, int y, int width, int height,
+                                            int radiusm, bool outline) {
+    // draw the arch
+    draw_circle(x + radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + radiusm, y + height - radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + height - radiusm, radiusm, outline);
+
+    // draw the rectangle
+    draw_rectangle(x + radiusm, y, width - radiusm * 2, height, false);
+    draw_rectangle(x, y + width, radiusm, height - 2 * radiusm, false);
+    draw_rectangle(x + width - radiusm, y + width, radiusm,
+                   height - 2 * radiusm, false);
+
+    // draw the ouline
+    SWWBrain.Screen.setPenWidth(outline_width);
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(outline_color);
+    SWWBrain.Screen.drawLine(x + radiusm, y, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x + radiusm, y + height, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x, y + radiusm, x, y + height - radiusm);
+    SWWBrain.Screen.drawLine(x + width, y + radiusm, x + width,
+                             y + height - radiusm);
+}
+
+void DrawGeometry::draw_rectangle_with_arch(int x, int y, int width, int height,
+                                            bool outline) {
+    float radiusm = ((1 - GOLDEN_RATIO) * width) / 2;
+    // draw the arch
+    draw_circle(x + radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + radiusm, y + height - radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + height - radiusm, radiusm, outline);
+
+    // draw the rectangle
+    draw_rectangle(x + radiusm, y, width - radiusm * 2, height, false);
+    draw_rectangle(x, y + width, radiusm, height - 2 * radiusm, false);
+    draw_rectangle(x + width - radiusm, y + width, radiusm,
+                   height - 2 * radiusm, false);
+
+    // draw the ouline
+    SWWBrain.Screen.setPenWidth(outline_width);
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(outline_color);
+    SWWBrain.Screen.drawLine(x + radiusm, y, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x + radiusm, y + height, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x, y + radiusm, x, y + height - radiusm);
+    SWWBrain.Screen.drawLine(x + width, y + radiusm, x + width,
+                             y + height - radiusm);
 }
