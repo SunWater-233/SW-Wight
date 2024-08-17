@@ -19,6 +19,13 @@ class button {
     color outline_default_color;
     color outline_selected_color;
 
+    int label_x, label_y;
+    bool display_label = false;
+    char *display_label_font = "";
+    enum button_label_alignment label_alignment = INSIDE;
+    color label_display_color;
+    fontType label_display_font = mono20;
+
     /// @brief There are interact modes.
     /// PRESS: The button can be pressed.
     /// SELECT: The button can be selected.
@@ -27,6 +34,9 @@ class button {
     DevelopTool::PressDetector ButtonPressDetector;
     bool pressing_state = false;
     bool selected_state = false;
+
+    /// @brief display the label
+    void render_label();
 
    public:
     // constructors for the button
@@ -123,6 +133,29 @@ class button {
     /// @brief set the button select state
     /// @param state
     void set_select_state(bool state);
+
+    /// @brief whether to display label or not
+    /// @param state
+    void set_label_display_state(bool state);
+
+    /// @brief set what to print as a label
+    /// @param label
+    /// @param alignment where you want to display the label
+    void set_label(char *label, enum button_label_alignment alignment = INSIDE);
+
+    /// @brief set the color of the outline  when the button is isn't pressed or
+    /// selecteed
+    /// @param hex_color require const char type
+    void set_label_color(const char *hex_color);
+
+    /// @brief set the color of the outline  when the button is isn't pressed or
+    /// selecteed
+    /// @param r
+    /// @param g
+    /// @param b
+    void set_label_color(int r, int g, int b);
+
+    void set_label_font(fontType label_font);
 
     /// @brief check whether the button is selected or no
     /// @return return true if the button is selected.If not, return false

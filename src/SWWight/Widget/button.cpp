@@ -18,6 +18,7 @@ button::button(int x, int y, int width, int hight,
     set_button_selected_color(SWWColor.peter_river);
     set_outline_default_color(SWWColor.clouds);
     set_outline_selected_color(SWWColor.sun_flower);
+    set_label_color(SWWColor.clouds);
 }
 
 button::button(int x, int y, int width, int hight, button_interact_mode mode,
@@ -35,6 +36,7 @@ button::button(int x, int y, int width, int hight, button_interact_mode mode,
     set_button_selected_color(SWWColor.peter_river);
     set_outline_default_color(SWWColor.clouds);
     set_outline_selected_color(SWWColor.sun_flower);
+    set_label_color(SWWColor.clouds);
 }
 
 button::button(int x, int y, int width, int hight, button_interact_mode mode,
@@ -52,6 +54,18 @@ button::button(int x, int y, int width, int hight, button_interact_mode mode,
     set_button_selected_color(SWWColor.peter_river);
     set_outline_default_color(SWWColor.clouds);
     set_outline_selected_color(SWWColor.sun_flower);
+    set_label_color(SWWColor.clouds);
+}
+
+void button::render_label() {
+    SWWBrain.Screen.setPenColor(label_display_color);
+    if (label_alignment == INSIDE) {
+        SWWBrain.Screen.setFillColor(button_display_color);
+    } else if (label_alignment == DOWNSIDE) {
+        SWWBrain.Screen.setFillColor(transparent);
+    }
+    SWWBrain.Screen.setFont(label_display_font);
+    SWWBrain.Screen.printAt(label_x, label_y, display_label_font);
 }
 
 void button::set_button_size(int width, int height) {
@@ -110,6 +124,43 @@ void button::set_interact_state(enum button_interact_mode mode) {
 
 void button::set_select_state(bool state) { selected_state = state; }
 
+void button::set_label_display_state(bool state) { display_label = state; }
+
+void button::set_label(char *label, enum button_label_alignment alignment) {
+    int label_width = SWWTool.get_character_width(label, label_display_font);
+    int label_height = SWWTool.get_character_height(label, label_display_font);
+
+    display_label = true;
+    display_label_font = label;
+    label_alignment = alignment;
+    if (label_alignment == INSIDE) {
+        float spare_space_width = (button_width - label_width) / 2;
+        float spare_space_height = (button_height - label_height) / 2;
+
+        label_x = button_x + spare_space_width;
+        label_y = button_y + spare_space_height;
+    }
+
+    else if (label_alignment == DOWNSIDE) {
+        float spare_space_width = (button_width - label_width) / 2;
+
+        label_x = button_x + spare_space_width;
+        label_y = button_y + button_height + 10;
+    }
+}
+
+void button::set_label_color(const char *hex_color) {
+    label_display_color.web(hex_color);
+}
+
+void button::set_label_color(int r, int g, int b) {
+    label_display_color = SWWTool.rgb_to_vex_color(r, g, b);
+}
+
+void button::set_label_font(fontType label_font) {
+    label_display_font = label_font;
+}
+
 bool button::determine_selected() {
     if (button_interact == SELECT && determine_pressing()) {
         selected_state = !selected_state;
@@ -154,5 +205,10 @@ void button::display() {
 
     SWWGeometry.set_fill_color(button_display_color);
     SWWGeometry.set_outline_width(outline_display_color);
-    SWWGeometry.draw_rectangle(button_x, button_y, button_width, button_height, true);
+    SWWGeometry.draw_rectangle(button_x, button_y, button_width, button_height,
+                               true);
+
+    if (display_label) {
+        render_label();
+    }
 }

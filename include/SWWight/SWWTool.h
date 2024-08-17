@@ -20,6 +20,11 @@ extern vex::brain SWWBrain;
 /// SELECT: The button can selected
 enum button_interact_mode { PRESS, SELECT };
 
+/// @brief There are two places to display the button
+/// INSIDE: The label will be displayed inside the button
+/// INSIDE: The label will be displayed below the button
+enum button_label_alignment { INSIDE, DOWNSIDE };
+
 /// @brief There is two display modes for Graph
 /// STAY: All the data will remain in the graph, and zoom rate will change
 /// accroding to the data. PASS: There will only be some data in the graph, and
