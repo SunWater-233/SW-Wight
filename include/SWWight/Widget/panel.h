@@ -2,18 +2,18 @@
 
 #include "SWWight/SWWTool.h"
 
+namespace SWWight {
 class panel {
    private:
     // basic variables inital
     // all color will be initialized in the constructor
 
     int panel_x_position, panel_y_position;
-    color panel_backgroud_color = color::black;
+    color panel_backgroud_color;
 
     int chart_radius;
-    int chart_center_x = panel_x_position + chart_radius;
-    int chart_center_y = panel_y_position + chart_radius;
-    float zoom_rate = chart_radius / 100;
+    int chart_center_x;
+    int chart_center_y;
 
     float data_lim_min, data_lim_max;
     int panel_data = 0;
@@ -32,12 +32,27 @@ class panel {
     color outline_color;
 
     int indicator_width = 5;
-    color indicator_color = color::white;
+    color indicator_color;
 
     void set_data_label_width_height();
 
    public:
+    /// @brief The constructor of Panel
+    /// @param x x position(upper left corner)
+    /// @param y y position(upper left corner)
+    /// @param radius the radius of the panel
+    /// @param data_lim_min the minimum value the panel should receive
+    /// @param data_lim_max the maximum value the panel should receive
     panel(int x, int y, int radius, float data_lim_min, float data_lim_max);
+
+    /// @brief set the position of the panel
+    /// @param x unit is pixel
+    /// @param y unit is pixel
+    void set_panel_position(int x, int y);
+
+    /// @brief set the radius of the panel
+    /// @param radius unit is pixel
+    void set_panel_radius(int radius);
 
     /// @brief transfer the data into the
     /// @param data
@@ -107,3 +122,4 @@ class panel {
     /// setting on Screen.Remember to RESET your font if you need it.
     void display();
 };
+}  // namespace SWWight

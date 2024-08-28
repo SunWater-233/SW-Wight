@@ -46,19 +46,17 @@ The installation is actually pretty simple. Here is something  you need to do.
     #include "SWWight/SWWight.h"
     ........
     void pre_auton(void) {
-      // Initializing Robot Configuration. DO NOT REMOVE!
-      vexcodeInit();
-      logic_runner();
-      render_runner();
-      // All activities that occur before the competition starts
-      // Example: clearing encoders, setting servo positions, ...
+      SWWight::logic_runner();
+      SWWight::render_runner();
+      ........
     }
     ........
     ```
     
     And then it should look like this ↓
     
-    ![屏幕截图 2024-06-20 150323](https://github.com/SunWater-233/SW-Wight/assets/109706896/a906d086-a886-4903-a3aa-0c229c99598d)
+    ![屏幕截图 2024-07-13 171813](https://github.com/user-attachments/assets/5677f619-9bf4-49e3-a248-b5b268ea6eb0)
+
 
     
 5. Try to compile it. If the compiler does not report an error, congratulation! (￣▽￣)~*  You just successfully install SW-Wight to your project.(´･ᴗ･`) If something goes wrong, you could check  **robot-config.h** and **robot-config.cpp**.Your Brain and Motors should be declared there.

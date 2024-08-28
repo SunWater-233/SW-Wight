@@ -38,6 +38,8 @@
 		"deque": "cpp",
 		"string": "cpp",
 		"algorithm": "cpp",
-		"numeric": "cpp"
+		"numeric": "cpp",
+		"cstring": "cpp",
+		"iostream": "cpp"
 	}
 }

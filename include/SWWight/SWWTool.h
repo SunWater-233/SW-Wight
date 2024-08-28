@@ -1,23 +1,45 @@
 #pragma once
 
+#include <algorithm>
+#include <array>
 #include <cstring>
 #include <sstream>
+#include <string>
 #include <vector>
 
 #include "vex.h"
 
-#define PI 3.14159
+namespace SWWight {
 
-/// @brief There are to interact modes.
-/// PRESS: The button can be pressed.
-/// SELECT: The button can selected.
-enum interact_mode { PRESS, SELECT };
+extern vex::brain SWWBrain;
 
-/// @brief There is two display mode.
+#define GOLDEN_RATIO 0.618
+
+/// @brief There are two interact modes for Button
+/// PRESS: The button can be pressed
+/// SELECT: The button can selected
+enum button_interact_mode { PRESS, SELECT };
+
+/// @brief There are two places to display the button
+/// INSIDE: The label will be displayed inside the button
+/// INSIDE: The label will be displayed below the button
+enum button_label_alignment { INSIDE, DOWNSIDE };
+
+/// @brief There is two display modes for Graph
 /// STAY: All the data will remain in the graph, and zoom rate will change
 /// accroding to the data. PASS: There will only be some data in the graph, and
 /// the rest of data will be deleted.
-enum display_mode { STAY, PASS };
+enum graph_display_mode { STAY, PASS };
+
+/// @brief There are two line styles
+/// LINE: The graph's data will be presented as a line
+/// DOT: The graph's data will be presented as dots
+enum graph_line_style { LINE, DOT };
+
+/// @brief There are two layout mode for Slider
+/// VERTICAL: The slider will be placed vertically
+/// HORIZONTAL: The slider will be placed horizontally
+enum slider_layout_mode { VERTICAL, HORIZONTAL };
 
 class DevelopTool {
    private:
@@ -67,7 +89,13 @@ class DevelopTool {
     /// @brief find the largest element in a float vector.
     /// @param vec a float vector
     /// @return the value of the largest element
-    float find_max_in_vec(std::vector<float> vec);
+    float find_max_in_float_vec(std::vector<float> vec);
+
+    /// @brief find specfic element in a vector
+    /// @param vec
+    /// @return the index of the found element.If finds nothing, return -1
+    template <typename T>
+    int get_element_index_in_vec(std::vector<T> vec, T to_find);
 
     /// @brief turn a float vaule into the type char* DONT forget to realse the
     /// memory
@@ -80,8 +108,89 @@ class DevelopTool {
     /// @param value
     /// @return a value in char* type
     char *int_to_char(int value);
+
+    class PressDetector {
+       private:
+        int x_detect_range[2] = {0, 0};
+        int y_detect_range[2] = {0, 0};
+
+        int x_press_postion = -1;
+        int y_press_postion = -1;
+
+       public:
+        PressDetector(int x1, int y1, int x2, int y2);
+        void set_x_detect_range(int x1, int x2);
+        void set_y_detect_range(int y1, int y2);
+
+        bool area_pressing();
+        std::array<int, 2> get_press_position();
+    };
 };
 extern DevelopTool SWWTool;
+
+class DrawGeometry {
+   private:
+    color fill_color;
+    color outline_color;
+
+    int outline_width = 3;
+
+    std::array<float, 2> rotate_coordinate(float origin_x, float origin_y,
+                                           float x, float y,
+                                           float rotation_angle);
+    std::array<float, 2> rotate_coordinate(float x, float y,
+                                           float rotation_angle);
+
+    std::array<float, 2> move_coordinate(float delta_x, float delta_y,
+                                         std::array<float, 2> dot);
+
+   public:
+    DrawGeometry();
+
+    /// @brief set the fill color
+    /// @param hex_color require color type
+    void set_fill_color(color vex_color);
+
+    /// @brief set the fill color
+    /// @param hex_color require const char type
+    void set_fill_color(const char *hex_color);
+
+    /// @brief et the fill color
+    /// @param r
+    /// @param g
+    /// @param b
+    void set_fill_color(int r, int g, int b);
+
+    /// @brief set the outline color
+    /// @param hex_color require color type
+    void set_outline_color(color vex_color);
+
+    /// @brief set the outline color
+    /// @param hex_color require const char type
+    void set_outline_color(const char *hex_color);
+
+    /// @brief set the outline color
+    /// @param r
+    /// @param g
+    /// @param b
+    void set_outline_color(int r, int g, int b);
+
+    void set_outline_width(int width);
+
+    void draw_ellipse(int center_x, int center_y, int short_axis_length,
+                      int long_axis_length, int rotation_angle = 0,
+                      bool outline = true);
+
+    void draw_rectangle(int x, int y, int width, int height,
+                        bool outline = true);
+    void draw_circle(int center_x, int center_y, int radiusm,
+                     bool outline = true);
+    void draw_rectangle_with_arch(int x, int y, int width, int height,
+                                  int radiusm, bool outline = true);
+    void draw_rectangle_with_arch(int x, int y, int width, int height,
+                                  bool outline = true);
+};
+extern DrawGeometry SWWGeometry;
 
 // color below is from https://flatuicolors.com/palette/defo
 class SWWHexColor {
@@ -107,5 +216,6 @@ class SWWHexColor {
     const char *concrete = "#95a5a6";
     const char *asbestos = "#7f8c8d";
 };
-
 extern SWWHexColor SWWColor;
+
+}  // namespace SWWight

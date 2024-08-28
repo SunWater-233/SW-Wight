@@ -1,9 +1,14 @@
 #include "SWWight/SWWTool.h"
 
-using namespace vex;
-
+// some definations of classes in the namespace
+namespace SWWight {
+vex::brain SWWBrain;
 DevelopTool SWWTool;
+DrawGeometry SWWGeometry;
 SWWHexColor SWWColor;
+}  // namespace SWWight
+
+using namespace SWWight;
 
 color DevelopTool::rgb_to_vex_color(int r, int g, int b) {
     color tmp = color(r, g, b);
@@ -16,11 +21,11 @@ bool DevelopTool::get_start_state() { return start_gui; }
 
 float DevelopTool::get_frame_pause_time() { return frame_pause_time; }
 
-int DevelopTool::get_character_width(char *str, fontType font) {
+int DevelopTool::get_character_width(char* str, fontType font) {
     int font_width;
 
-    Brain.Screen.setFont(font);
-    font_width = Brain.Screen.getStringWidth(str);
+    SWWBrain.Screen.setFont(font);
+    font_width = SWWBrain.Screen.getStringWidth(str);
 
     return font_width;
 }
@@ -28,13 +33,27 @@ int DevelopTool::get_character_width(char *str, fontType font) {
 int DevelopTool::get_character_height(char* str, fontType font) {
     int font_height;
 
-    Brain.Screen.setFont(font);
-    font_height = Brain.Screen.getStringHeight(str);
+    SWWBrain.Screen.setFont(font);
+    font_height = SWWBrain.Screen.getStringHeight(str);
 
     return font_height;
 }
 
-float DevelopTool::find_max_in_vec(std::vector<float> vec) {
+template <typename T>
+int DevelopTool::get_element_index_in_vec(std::vector<T> vec, T to_find) {
+    int index = -1;
+    auto it = std::find(vec.begin(), vec.end(), to_find);
+
+    if (vec.empty() || it == vec.end()) {
+        index = -1;
+    } else {
+        index = std::distance(vec.begin(), it);
+    }
+
+    return index;
+}
+
+float DevelopTool::find_max_in_float_vec(std::vector<float> vec) {
     float max = vec[0];
     for (int i = 1; i < vec.size(); i++) {
         if (vec[i] > max) {
@@ -62,4 +81,236 @@ char* DevelopTool::int_to_char(int value) {
     std::strcpy(result, str.c_str());
 
     return result;
+}
+
+DevelopTool::PressDetector::PressDetector(int x1, int y1, int x2, int y2) {
+    x_detect_range[0] = x1;
+    x_detect_range[1] = x2;
+
+    y_detect_range[0] = y1;
+    y_detect_range[1] = y2;
+}
+
+void DevelopTool::PressDetector::set_x_detect_range(int x1, int x2) {
+    x_detect_range[0] = x1;
+    x_detect_range[1] = x2;
+}
+
+void DevelopTool::PressDetector::set_y_detect_range(int y1, int y2) {
+    y_detect_range[0] = y1;
+    y_detect_range[1] = y2;
+}
+
+bool DevelopTool::PressDetector::area_pressing() {
+    if (!SWWBrain.Screen.pressing()) {
+        return false;
+    }
+
+    x_press_postion = SWWBrain.Screen.xPosition();
+    y_press_postion = SWWBrain.Screen.yPosition();
+
+    bool x_condition = x_press_postion >= x_detect_range[0] &&
+                       x_press_postion <= x_detect_range[1];
+    bool y_condition = y_press_postion >= y_detect_range[0] &&
+                       y_press_postion <= y_detect_range[1];
+
+    return x_condition && y_condition;
+}
+
+std::array<int, 2> DevelopTool::PressDetector::get_press_position() {
+    if (!area_pressing()) {
+        return {-1, -1};
+    }
+
+    return {x_press_postion, y_press_postion};
+}
+
+DrawGeometry::DrawGeometry() {
+    fill_color.web(SWWColor.midnight_blue);
+    outline_color.web(SWWColor.clouds);
+}
+
+std::array<float, 2> DrawGeometry::rotate_coordinate(float origin_x,
+                                                     float origin_y, float x,
+                                                     float y,
+                                                     float rotation_angle) {
+    // 将角度转换为弧度
+    float radian = rotation_angle * M_PI / 180.0;
+
+    // 平移点，使旋转中心变为原点
+    float x_prime = x - origin_x;
+    float y_prime = y - origin_y;
+
+    // 旋转点
+    float x_rotated = x_prime * cos(radian) - y_prime * sin(radian);
+    float y_rotated = x_prime * sin(radian) + y_prime * cos(radian);
+
+    // 平移回原始坐标系
+    float x_final = x_rotated + origin_x;
+    float y_final = y_rotated + origin_y;
+
+    return {x_final, y_final};
+}
+
+std::array<float, 2> DrawGeometry::rotate_coordinate(float x, float y,
+                                                     float rotation_angle) {
+    return rotate_coordinate(0, 0, x, y, rotation_angle);
+}
+
+std::array<float, 2> DrawGeometry::move_coordinate(float delta_x, float delta_y,
+                                                   std::array<float, 2> dot) {
+    return {dot[0] + delta_x, dot[1] + delta_y};
+}
+
+void DrawGeometry::set_fill_color(color vex_color) { fill_color = vex_color; }
+
+void DrawGeometry::set_fill_color(const char* hex_color) {
+    fill_color.web(hex_color);
+}
+
+void DrawGeometry::set_fill_color(int r, int g, int b) {
+    fill_color = SWWTool.rgb_to_vex_color(r, g, b);
+}
+
+void DrawGeometry::set_outline_color(color vex_color) {
+    outline_color = vex_color;
+}
+
+void DrawGeometry::set_outline_color(const char* hex_color) {
+    outline_color.web(hex_color);
+}
+
+void DrawGeometry::set_outline_color(int r, int g, int b) {
+    outline_color = SWWTool.rgb_to_vex_color(r, g, b);
+}
+
+void DrawGeometry::set_outline_width(int width) { outline_width = width; }
+
+void DrawGeometry::draw_ellipse(int center_x, int center_y,
+                                int short_axis_length, int long_axis_length,
+                                int rotation_angle, bool outline) {
+    float a = long_axis_length / 2;
+    float b = short_axis_length / 2;
+    int outline_width_tmp = outline_width;
+
+    if (!outline) {
+        outline_width_tmp = 0;
+    }
+
+    // 绘制椭圆轮廓
+    SWWBrain.Screen.setPenColor(outline_color);
+    for (int y = -b; y <= b; y++) {
+        // 计算椭圆边界上的x值
+        float x_boundary = a * sqrt(1 - (y * y) / (float)(b * b));
+
+        std::array<float, 2> dot_left_rotated =
+            rotate_coordinate(-x_boundary, y, rotation_angle);
+        std::array<float, 2> dot_right_rotated =
+            rotate_coordinate(x_boundary, y, rotation_angle);
+
+        std::array<float, 2> dot_left_moved =
+            move_coordinate(center_x, center_y, dot_left_rotated);
+        std::array<float, 2> dot_right_moved =
+            move_coordinate(center_x, center_y, dot_right_rotated);
+
+        SWWBrain.Screen.drawLine(dot_left_moved[0], dot_left_moved[1],
+                                 dot_right_moved[0], dot_right_moved[1]);
+    }
+    // 绘制椭圆内部
+    a = a - outline_width_tmp / 2;
+    b = b - outline_width_tmp / 2;
+
+    SWWBrain.Screen.setPenColor(fill_color);
+    for (int y = -b; y <= b; y++) {
+        // 计算椭圆边界上的x值
+        float x_boundary = a * sqrt(1 - (y * y) / (float)(b * b));
+
+        std::array<float, 2> dot_left_rotated =
+            rotate_coordinate(-x_boundary, y, rotation_angle);
+        std::array<float, 2> dot_right_rotated =
+            rotate_coordinate(x_boundary, y, rotation_angle);
+
+        std::array<float, 2> dot_left_moved =
+            move_coordinate(center_x, center_y, dot_left_rotated);
+        std::array<float, 2> dot_right_moved =
+            move_coordinate(center_x, center_y, dot_right_rotated);
+
+        SWWBrain.Screen.drawLine(dot_left_moved[0], dot_left_moved[1],
+                                 dot_right_moved[0], dot_right_moved[1]);
+    }
+}
+
+void DrawGeometry::draw_rectangle(int x, int y, int width, int height,
+                                  bool outline) {
+    if (outline) {
+        SWWBrain.Screen.setPenWidth(outline_width);
+    } else {
+        SWWBrain.Screen.setPenWidth(0);
+    }
+
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(fill_color);
+    SWWBrain.Screen.drawRectangle(x, y, width, height);
+}
+void DrawGeometry::draw_circle(int center_x, int center_y, int radiusm,
+                               bool outline) {
+    if (outline) {
+        SWWBrain.Screen.setPenWidth(outline_width);
+    } else {
+        SWWBrain.Screen.setPenWidth(0);
+    }
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(fill_color);
+    SWWBrain.Screen.drawCircle(center_x, center_y, radiusm);
+}
+
+void DrawGeometry::draw_rectangle_with_arch(int x, int y, int width, int height,
+                                            int radiusm, bool outline) {
+    // draw the arch
+    draw_circle(x + radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + radiusm, y + height - radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + height - radiusm, radiusm, outline);
+
+    // draw the rectangle
+    draw_rectangle(x + radiusm, y, width - radiusm * 2, height, false);
+    draw_rectangle(x, y + width, radiusm, height - 2 * radiusm, false);
+    draw_rectangle(x + width - radiusm, y + width, radiusm,
+                   height - 2 * radiusm, false);
+
+    // draw the ouline
+    SWWBrain.Screen.setPenWidth(outline_width);
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(outline_color);
+    SWWBrain.Screen.drawLine(x + radiusm, y, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x + radiusm, y + height, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x, y + radiusm, x, y + height - radiusm);
+    SWWBrain.Screen.drawLine(x + width, y + radiusm, x + width,
+                             y + height - radiusm);
+}
+
+void DrawGeometry::draw_rectangle_with_arch(int x, int y, int width, int height,
+                                            bool outline) {
+    float radiusm = ((1 - GOLDEN_RATIO) * width) / 2;
+    // draw the arch
+    draw_circle(x + radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + radiusm, radiusm, outline);
+    draw_circle(x + radiusm, y + height - radiusm, radiusm, outline);
+    draw_circle(x + width - radiusm, y + height - radiusm, radiusm, outline);
+
+    // draw the rectangle
+    draw_rectangle(x + radiusm, y, width - radiusm * 2, height, false);
+    draw_rectangle(x, y + width, radiusm, height - 2 * radiusm, false);
+    draw_rectangle(x + width - radiusm, y + width, radiusm,
+                   height - 2 * radiusm, false);
+
+    // draw the ouline
+    SWWBrain.Screen.setPenWidth(outline_width);
+    SWWBrain.Screen.setPenColor(outline_color);
+    SWWBrain.Screen.setFillColor(outline_color);
+    SWWBrain.Screen.drawLine(x + radiusm, y, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x + radiusm, y + height, x + width - radiusm, y);
+    SWWBrain.Screen.drawLine(x, y + radiusm, x, y + height - radiusm);
+    SWWBrain.Screen.drawLine(x + width, y + radiusm, x + width,
+                             y + height - radiusm);
 }
